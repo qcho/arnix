@@ -1,0 +1,6 @@
+#!/bin/bash
+kill $(pidof bochs-bin)
+make clean
+make
+mcopy bin/kernel.bin b:boot/ -o
+bochs
