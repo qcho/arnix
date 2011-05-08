@@ -1,5 +1,6 @@
 #include "../include/kasm.h"
 #include "../include/defs.h"
+#include "common/screen.h"
 
 DESCR_INT idt[0xA];			/* IDT de 10 entradas*/
 IDTR idtr;				/* IDTR */
@@ -7,10 +8,9 @@ IDTR idtr;				/* IDTR */
 int tickpos=0;
 
 void int_08() {
-
-    char *video = (char *) 0xb8000;
-    video[tickpos+=2]='*';
-
+    if (tickpos++ < 1200) {
+        screen_put('*', 9, 13);
+    }
 }
 
 /**********************************************
@@ -25,7 +25,9 @@ kmain()
 
 /* Borra la pantalla. */ 
 
-	k_clear_screen();
+        screen_clear();
+        
+        screen_write("Hello, world!", 2, 6); 
 
 
 /* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */
