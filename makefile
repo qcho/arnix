@@ -16,19 +16,21 @@ ASMSRCS := $(shell find -L $(PROJDIRS) -type f -name "*.asm")
 COBJS := $(patsubst src/%.c,bin/%.o,$(CSRCS))
 ASMOBJS := $(patsubst src/%.asm,bin/%.o,$(ASMSRCS))
 
+OBJS := $(ASMOBJS) $(COBJS)
+OBJDIRS := $(sort $(dir $(OBJS)))
+
 .PHONY: all clean
 
-all: $(BINARY)
+all: $(OBJDIRS) $(BINARY)
+
+$(OBJDIRS):
+	mkdir $@
 
 $(BINARY): $(ASMOBJS) $(COBJS)
 	$(LD) -T link.ld -o $(BINARY) $(ASMOBJS) $(COBJS)
 
 clean:
-	-@$(RM) $(wildcard $(BINARY) $(ASMOBJS) $(COBJS))
-
-bin/kstart.o:
-	nasm -f aout src/kstart.asm -o bin/kstart.o
-	nasm -f aout src/loader.asm -o bin/kstart.o
+	-@$(RM) -rf $(OBJDIRS)
 
 $(ASMOBJS): bin/%.o : src/%.asm
 	nasm -f aout $< -o $@
