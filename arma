@@ -1,2 +1,0 @@
-./compila
-mcopy bin/kernel.bin b:boot/ -o
