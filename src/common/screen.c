@@ -7,8 +7,25 @@
 // The VGA framebuffer starts at 0xB8000.
 u16int *video_memory = (u16int *)0xB8000;
 // Stores the cursor position.
+
 u8int cursor_x = 0;
 u8int cursor_y = 0;
+
+u8int backColour = BLACK;
+u8int foreColour = WHITE;
+
+void screen_setBackColour(enum Colour colour) {
+    backColour = (u8int)colour;
+}
+
+void screen_setForeColour(enum Colour colour) {
+    foreColour = (u8int)colour;
+}
+
+void screen_setColours(enum Colour colourBack, enum Colour colourFore) {
+    screen_setBackColour(colourBack);
+    screen_setForeColour(colourFore);
+}
 
 // Updates the hardware cursor.
 static void move_cursor()
@@ -52,7 +69,7 @@ static void scroll()
 }
 
 // Writes a single character out to the screen.
-void screen_put(char c, u8int backColour, u8int foreColour)
+void screen_put(char c)
 {
 
     // The attribute byte is made up of two nibbles - the lower being the 
@@ -131,12 +148,12 @@ void screen_clear()
 }
 
 // Outputs a null-terminated ASCII string to the screen.
-void screen_write(char *c, u8int backColour, u8int foreColour)
+void screen_write(char *string)
 {
     int i = 0;
-    while (c[i])
+    while (string[i])
     {
-        screen_put(c[i++], backColour, foreColour);
+        screen_put(string[i++]);
     }
 }
 

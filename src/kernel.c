@@ -8,8 +8,9 @@ IDTR idtr;				/* IDTR */
 int tickpos=0;
 
 void int_08() {
-    if (tickpos++ < 1200) {
-        screen_put('*', 9, 13);
+    screen_setForeColour(tickpos%15);
+    if (tickpos++ < 2400) {
+        screen_put('*');
     }
 }
 
@@ -26,8 +27,8 @@ kmain()
 /* Borra la pantalla. */ 
 
         screen_clear();
-        
-        screen_write("Hello, world!", 2, 6); 
+        screen_write("Hello, world!");
+        screen_setBackColour(LIGHT_GREY);
 
 
 /* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */
