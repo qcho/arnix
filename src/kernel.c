@@ -9,8 +9,10 @@ int tickpos=0;
 
 void int_08() {
     screen_setForeColour(tickpos%15);
-    if (tickpos++ < 2400) {
+    if (tickpos++ < 640) {
         screen_put('*');
+    } else {
+    	outb(0x64,0xFE);
     }
 }
 
