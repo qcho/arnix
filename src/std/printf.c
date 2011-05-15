@@ -1,25 +1,16 @@
 //para printf
-#include "../include/varargs.h"
-#include "../include/stdarg.h"
+#include "../../include/varargs.h"
+#include "../../include/stdarg.h"
+#include "../kernel/driver/screen.h"
 
 
 static void printchar(char c);
-
-static int getNumber(const char ** format);
-
-static int pow(int num, int exponent);
-
-static void printchar(char c);
-
-static void putSpaces(int count);
-
-static void putZeroz(int count);
 
 static void printf(char *format, ...);
 
 static void prints(char * string);
 
-char * numberBaseNtoString(unsigned int number, int base, char * out);
+static char * numberBaseNtoString(unsigned int number, int base, char * out);
 //para printf
 
 
