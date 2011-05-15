@@ -2,6 +2,7 @@
 BINARY := bin/kernel.bin
 
 CFLAGS := -fno-builtin
+LDFLAGS := -Tlink.ld
 
 # Directories belonging to the project
 PROJDIRS := src include
@@ -27,7 +28,7 @@ $(OBJDIRS):
 	mkdir $@
 
 $(BINARY): $(ASMOBJS) $(COBJS)
-	$(LD) -T link.ld -o $(BINARY) $(ASMOBJS) $(COBJS)
+	$(LD) $(LDFLAGS) -o $(BINARY) $(ASMOBJS) $(COBJS)
 
 clean:
 	-@$(RM) -rf $(OBJDIRS)
