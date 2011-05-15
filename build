@@ -2,5 +2,11 @@
 kill $(pidof bochs-bin)
 make clean
 make
-mcopy bin/kernel.bin b:boot/ -o
-bochs
+STATUS=$?
+if [ $STATUS -ne 0 ]
+then
+    echo "Error status: $STATUS"
+else
+    mcopy bin/kernel.bin b:boot/ -o
+    bochs
+fi
