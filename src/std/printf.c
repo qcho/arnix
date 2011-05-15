@@ -71,7 +71,7 @@ static void printf( char * formatString, ...) {
 		}
 		formatString++;
 	}
-	va_end(argp);
+	va_end(args);
 }
 
 static void prints(char * string){
