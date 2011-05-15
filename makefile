@@ -25,7 +25,7 @@ OBJDIRS := $(sort $(dir $(OBJS)))
 all: $(OBJDIRS) $(BINARY)
 
 $(OBJDIRS):
-	mkdir $@
+	mkdir -p $@
 
 $(BINARY): $(ASMOBJS) $(COBJS)
 	$(LD) $(LDFLAGS) -o $(BINARY) $(ASMOBJS) $(COBJS)

@@ -14,7 +14,7 @@ extern void idt_flush(uint32_t);
 
 // Internal function prototypes.
 static void init_idt();
-static void idt_set_gate(uint8_t,uint32_t,uint16_t,uint8_t);
+static void idt_set_gate(uint8_t, uint32_t, uint16_t, uint8_t);
 
 idt_entry_t idt_entries[256];
 idt_ptr_t   idt_ptr;
@@ -83,6 +83,7 @@ static void init_idt()
     idt_set_gate(29, (uint32_t)isr29, 0x08, 0x8E);
     idt_set_gate(30, (uint32_t)isr30, 0x08, 0x8E);
     idt_set_gate(31, (uint32_t)isr31, 0x08, 0x8E);
+
     idt_set_gate(32, (uint32_t)irq0, 0x08, 0x8E);
     idt_set_gate(33, (uint32_t)irq1, 0x08, 0x8E);
     idt_set_gate(34, (uint32_t)irq2, 0x08, 0x8E);

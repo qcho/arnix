@@ -1,6 +1,6 @@
 #include "../include/kasm.h"
 #include "../include/defs.h"
-#include "driver/screen.h"
+#include "kernel/driver/screen.h"
 
 DESCR_INT idt[0xA];			/* IDT de 10 entradas*/
 IDTR idtr;				/* IDTR */
