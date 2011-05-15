@@ -5,6 +5,14 @@
 
 ; This macro creates a stub for an ISR which does NOT pass it's own
 ; error code (adds a dummy errcode byte).
+
+[GLOBAL idt_flush]    ; Allows the C code to call idt_flush().
+
+idt_flush:
+    mov eax, [esp+4]  ; Get the pointer to the IDT, passed as a parameter.
+    lidt [eax]        ; Load the IDT pointer.
+    ret
+
 %macro ISR_NOERRCODE 1
   global isr%1
   isr%1:
@@ -34,7 +42,7 @@
     push byte %2
     jmp irq_common_stub
 %endmacro
-        
+
 ISR_NOERRCODE 0
 ISR_NOERRCODE 1
 ISR_NOERRCODE 2
@@ -147,4 +155,4 @@ irq_common_stub:
     iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
 
 
-        
+

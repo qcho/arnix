@@ -4,17 +4,18 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-// Some nice typedefs, to standardise sizes across platforms.
-// These typedefs are written for 32-bit X86.
-typedef unsigned int   u32int;
-typedef          int   s32int;
-typedef unsigned short u16int;
-typedef          short s16int;
-typedef unsigned char  u8int;
-typedef          char  s8int;
+// Exact-width integer types
+typedef   signed char  int8_t;
+typedef unsigned char  uint8_t;
+typedef   signed short int16_t;
+typedef unsigned short uint16_t;
+typedef   signed int   int32_t;
+typedef unsigned int   uint32_t;
 
-void outb(u16int port, u8int value);
-u8int inb(u16int port);
-u16int inw(u16int port);
+#define NULL ((void*)0)
+
+void outb(uint16_t port, uint8_t value);
+uint8_t inb(uint16_t port);
+uint16_t inw(uint16_t port);
 
 #endif // COMMON_H
