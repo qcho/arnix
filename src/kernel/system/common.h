@@ -14,6 +14,12 @@ typedef unsigned int   uint32_t;
 
 #define NULL ((void*)0)
 
+// PIC
+#define PORT_PIC1 0x20
+#define PORT_PIC2 0xA0
+#define SIGNAL_EOI 0x20
+
+
 void outb(uint16_t port, uint8_t value);
 uint8_t inb(uint16_t port);
 uint16_t inw(uint16_t port);

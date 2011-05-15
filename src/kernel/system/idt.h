@@ -32,6 +32,8 @@ struct idt_ptr_struct
 
 typedef struct idt_ptr_struct idt_ptr_t;
 
+#define IDT_SIZE 256
+
 // These extern directives let us access the addresses of our ASM ISR handlers.
 extern void isr0 ();
 extern void isr1 ();
