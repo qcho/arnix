@@ -33,8 +33,8 @@
  */
 /* Appropriated for Reactos Crtdll by Ariadne */
 
-#ifndef _STDARG_H_
-#define _STDARG_H_
+#ifndef STDARG_H
+#define STDARG_H
 
 /*
  * Don't do any of this stuff for the resource compiler.

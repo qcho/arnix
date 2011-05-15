@@ -36,10 +36,8 @@
  *	@(#)varargs.h	8.2 (Berkeley) 3/22/94
  */
 
-#ifndef _ALPHA_VARARGS_H_
-#define	_ALPHA_VARARGS_H_
-
-// #include <machine/stdarg.h>
+#ifndef VARARGS_H
+#define	VARARGS_H
 
 #if !__GNUC_PREREQ__
 #define	__va_ellipsis
@@ -57,4 +55,4 @@
 #define	va_dcl		__va_alist_t __builtin_va_alist; __va_ellipsis
 
 
-#endif /* !_ALPHA_VARARGS_H_ */
+#endif
