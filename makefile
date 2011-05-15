@@ -1,7 +1,7 @@
 # Binary Name
 BINARY := bin/kernel.bin
 
-CFLAGS := -fno-builtin
+CFLAGS := -fno-builtin -fno-stack-protector
 LDFLAGS := -Tlink.ld
 
 # Directories belonging to the project
