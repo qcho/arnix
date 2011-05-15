@@ -1,7 +1,3 @@
-// screen.c -- Defines functions for writing to the screen.
-//             heavily based on Bran's kernel development tutorials,
-//             but rewritten for JamesM's kernel tutorials.
-
 #include "screen.h"
 
 // The VGA framebuffer starts at 0xB8000.

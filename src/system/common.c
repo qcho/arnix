@@ -1,6 +1,3 @@
-// common.c -- Defines some global functions.
-//             From JamesM's kernel development tutorials.
-
 #include "common.h"
 
 // Write a byte out to the specified port.
@@ -35,7 +32,7 @@ void memset(uint8_t *dest, uint8_t val, uint32_t len)
     // TODO: implement this yourself!
 }
 
-// Compare two strings. Should return -1 if 
+// Compare two strings. Should return -1 if
 // str1 < str2, 0 if they are equal or 1 otherwise.
 int strcmp(char *str1, char *str2)
 {
