@@ -18,14 +18,14 @@ void int_08() {
 //  	printf("te%cst  ",'j');
 //  	printf("te%sst  ","leeol");
 //  	printf("te%dst  ",0);
-  	printf("te%ust  ",3554);
-	printf("%o",9);
-	printf("\n");
- 	printf("%x",15);
-	printf("\n");
+//  	printf("te%ust  ",3554);
+//	printf("%o",9);
+//	printf("\n");
+//	printf("%x",15);
+//	printf("\n");
 //  	printf("te\nst  ");
 //  	printf("te\tst  ");
-//  	printf("te\\st  ");
+  	printf("te\\st  ");
 	while(1){}
     } else {
     	outb(0x64,0xFE);

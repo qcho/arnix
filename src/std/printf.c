@@ -66,20 +66,6 @@ static void printf( char * formatString, ...) {
 				  printchar('%');
 				  break;
 			}
-		} else if( *formatString == '\\' ){
-			formatString++;
-			switch(*formatString){
-			case 'n':
-				  printchar('\n');
-				  break;
-			case 't':
-				  printchar('\t');
-				  break;
-			case '\\':
- 				  printchar('\\');
-				  break;
-			}
-
 		} else{
 			printchar(*formatString);
 		}
