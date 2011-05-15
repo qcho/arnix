@@ -38,10 +38,6 @@ void irq_handler(registers_t regs)
     // Send reset signal to master. (As well as slave, if necessary).
     outb(0x20, 0x20);
 
-    if (interrupt_handlers[regs.int_no] != 0)
-    {
-        isr_t handler = interrupt_handlers[regs.int_no];
-        handler(regs);
-    }
+    isr_handler(regs);
 
 }
