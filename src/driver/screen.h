@@ -2,9 +2,10 @@
  * screen.h | Interfaz para manejo de pantalla.
  */
 
+#include "../system/common.h"
+
 #ifndef SCREEN_H
     #define SCREEN_H
-    #include "common.h"
 
     enum Colour {
         BLACK,
