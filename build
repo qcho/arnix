@@ -1,7 +1,14 @@
 #!/bin/bash
 
 kill $(pidof bochs-bin)
-make clean
+#parse arguments
+for var in "$@"
+do
+    if [ $var = "clean" ]
+    then
+        make clean
+    fi
+done
 make
 STATUS=$?
 if [ $STATUS -ne 0 ]
