@@ -70,7 +70,9 @@ kmain()
 	_Sti();
 	
 	init_descriptor_tables();
+	init_int80();
 	init_keyboard();
+	
 
         while(1)
         {

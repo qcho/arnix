@@ -9,6 +9,7 @@ EXTERN  int_08
 SECTION .text
 
 
+
 _Cli:
 	cli			; limpia flag de interrupciones
 	ret
