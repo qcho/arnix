@@ -40,6 +40,13 @@ void READ_INTERRUPT_handler(registers_t regs){
 init_keyboard(){
 	register_interrupt_handler(IRQ1,IRQ1_handler);
 	register_functionality(3,READ_INTERRUPT_handler);
+        load_qcho_scancodes();
 }
 
-
+load_qcho_scancodes() {
+    SCAN_CODE_TABLE = "@@1234567890-+\t@qwertyuiop{}@@asdfghjkl@@@@@zxcvbnm,.";
+    SCAN_CODE_TABLE[1] = '\x1B'; // esc
+    SCAN_CODE_TABLE[14] = '\x08'; // backspace
+    SCAN_CODE_TABLE[15] = '\t'; // tab
+    SCAN_CODE_TABLE[57] = ' '; // space
+}
