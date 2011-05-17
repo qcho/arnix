@@ -2,7 +2,8 @@
 #include "../include/defs.h"
 #include "../src/std/printf.c"
 #include "kernel/driver/screen.h"
-
+#include "kernel/system/idt.h"
+#include "kernel/driver/keyboard.h"
 
 DESCR_INT idt[0x80];			/* IDT de 80 entradas*/
 IDTR idtr;				/* IDTR */
@@ -26,7 +27,6 @@ void int_08() {
 //  	printf("te\nst  ");
 //  	printf("te\tst  ");
   	printf("te\\st  ");
-	while(1){}
     } else {
     	outb(0x64,0xFE);
     }
@@ -49,10 +49,9 @@ kmain()
 //         screen_write("Hello, world!");
         screen_setBackColour(LIGHT_GREY);
 
-
 /* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */
 
-        setup_IDT_entry (&idt[0x08], 0x08, (dword)&_int_08_hand, ACS_INT, 0);
+	setup_IDT_entry (&idt[0x08], 0x08, (dword)&_int_08_hand, ACS_INT, 0);
 
 /* Carga de IDTR    */
 
@@ -69,6 +68,9 @@ kmain()
         _mascaraPIC2(0xFF);
 
 	_Sti();
+	
+	init_descriptor_tables();
+	init_keyboard();
 
         while(1)
         {
