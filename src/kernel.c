@@ -1,11 +1,9 @@
 #include "../include/kasm.h"
 #include "../include/defs.h"
-#include "../src/std/printf.c"
 #include "kernel/driver/screen.h"
 #include "kernel/system/idt.h"
 #include "kernel/driver/keyboard.h"
-
-extern void _read();
+#include "std/printf.c"
 
 DESCR_INT idt[0x80];			/* IDT de 80 entradas*/
 IDTR idtr;				/* IDTR */
@@ -13,7 +11,7 @@ IDTR idtr;				/* IDTR */
 int tickpos=0;
 
 void int_08() {
-    screen_setForeColour(tickpos%15);
+/*    screen_setForeColour(tickpos%15);
 
     if (tickpos++ < 500) {
 
@@ -32,7 +30,7 @@ void int_08() {
     } else {
     	outb(0x64,0xFE);
     }
-}
+*/}
 
 
 /**********************************************
@@ -73,12 +71,9 @@ kmain()
 	
 	init_descriptor_tables();
 	init_int80();
+	init_in();
 	init_keyboard();
 	
-
-        while(1)
-        {
-     		_read();
-        }
+	shell_start();
 
 }

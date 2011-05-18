@@ -1,13 +1,12 @@
 #include "../system/isr.h"
 #include "../../std/printf.c"
-#include "../system/int80.h"
+#include "../system/in.h"
 
 #define KEYBOARD 0x60
 #define BUFFER_SIZE 200
+char array[BUFFER_SIZE];
 
-char buffer[BUFFER_SIZE];
-int buffer_start=0;
-int buffer_end=0;
+buffer stdin;
 
 
 char * SCAN_CODE_TABLE="--1234567890?¿\tqwertyuiop[]\n-asdfghjklñ{}-<zxcvbnm,.---- ";
@@ -16,10 +15,10 @@ void IRQ1_handler(registers_t reg){
 	int tmp;
 	int i=inb(KEYBOARD);
 	if(i<=0x39){
-		tmp=(buffer_end+1)%(BUFFER_SIZE+1);
-		if(tmp!=buffer_start){
-			buffer[buffer_end]=SCAN_CODE_TABLE[i];
-			buffer_end=tmp;
+		tmp=(stdin.end+1)%(stdin.buffer_size+1);
+		if(tmp!=stdin.start){
+			stdin.array[stdin.end]=SCAN_CODE_TABLE[i];
+			stdin.end=tmp;
 		}else
 		{
 			printf("buffer lleno");//TODO cambiar por bip
@@ -27,22 +26,17 @@ void IRQ1_handler(registers_t reg){
 	}
 }
 
-void READ_INTERRUPT_handler(registers_t regs){
-	if(buffer_start!=buffer_end){
-		printf("%c",buffer[buffer_start]);//esto es lo que deberia devolver en realidad, esta asi para prueba
-		buffer_start=(buffer_start+1)%(BUFFER_SIZE+1);
-	}
-}
-
-
 init_keyboard(){
 	register_interrupt_handler(IRQ1,IRQ1_handler);
-	register_functionality(3,READ_INTERRUPT_handler);
+	stdin.start=stdin.end=0;
+	stdin.array=array;
+	stdin.buffer_size=BUFFER_SIZE;
+	add_in(0,&stdin);
         load_qcho_scancodes();
 }
 
 load_qcho_scancodes() {
-    SCAN_CODE_TABLE = "@@1234567890-+\t@qwertyuiop{}@@asdfghjkl@@@@@zxcvbnm,.";
+    SCAN_CODE_TABLE = "@@1234567890-+\t@qwertyuiop{}\n@asdfghjkl@@@@@zxcvbnm,.";
     SCAN_CODE_TABLE[1] = '\x1B'; // esc
     SCAN_CODE_TABLE[14] = '\x08'; // backspace
     SCAN_CODE_TABLE[15] = '\t'; // tab
