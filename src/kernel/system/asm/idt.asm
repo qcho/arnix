@@ -75,6 +75,7 @@ ISR_NOERRCODE 28
 ISR_NOERRCODE 29
 ISR_NOERRCODE 30
 ISR_NOERRCODE 31
+
 IRQ   0,    32
 IRQ   1,    33
 IRQ   2,    34
@@ -91,6 +92,14 @@ IRQ  12,    44
 IRQ  13,    45
 IRQ  14,    46
 IRQ  15,    47
+
+  global isr80h
+  isr80h:
+    cli                         ; Disable interrupts firstly.
+    push byte 0                 ; Push a dummy error code.
+    push byte 128               ; Push the interrupt number.
+    jmp isr_common_stub         ; Go to our common handler code.
+
 
 ; In isr.c
 extern isr_handler

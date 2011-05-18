@@ -16,7 +16,6 @@ void IRQ1_handler(registers_t reg){
 	int tmp;
 	int i=inb(KEYBOARD);
 	if(i<=0x39){
-		printf("%c",SCAN_CODE_TABLE[i]);//solo para debuguear
 		tmp=(buffer_end+1)%(BUFFER_SIZE+1);
 		if(tmp!=buffer_start){
 			buffer[buffer_end]=SCAN_CODE_TABLE[i];
@@ -29,10 +28,9 @@ void IRQ1_handler(registers_t reg){
 }
 
 void READ_INTERRUPT_handler(registers_t regs){
-	int tmp=(buffer_start+1)%(BUFFER_SIZE+1);
-	if(tmp!=buffer_end){
+	if(buffer_start!=buffer_end){
 		printf("%c",buffer[buffer_start]);//esto es lo que deberia devolver en realidad, esta asi para prueba
-		buffer_start=tmp;
+		buffer_start=(buffer_start+1)%(BUFFER_SIZE+1);
 	}
 }
 

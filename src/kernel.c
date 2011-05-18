@@ -5,6 +5,8 @@
 #include "kernel/system/idt.h"
 #include "kernel/driver/keyboard.h"
 
+extern void _read();
+
 DESCR_INT idt[0x80];			/* IDT de 80 entradas*/
 IDTR idtr;				/* IDTR */
 
@@ -76,6 +78,7 @@ kmain()
 
         while(1)
         {
+     		_read();
         }
 
 }

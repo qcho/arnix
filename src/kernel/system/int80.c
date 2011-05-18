@@ -28,5 +28,5 @@ void init_int80(){
 	for(i=0;i<SUB_FUNC_VEC_SIZE;i++){
 		sub_funcs_vec[i]=nofunc;
 	}
-	register_interrupt_handler(80,int80_handler);
+	register_interrupt_handler(0X80,int80_handler);
 }

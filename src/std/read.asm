@@ -1,3 +1,5 @@
+global _read
+
 SECTION .text
 
 _read:
