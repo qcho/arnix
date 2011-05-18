@@ -1,3 +1,6 @@
+#ifndef PRINTF_C
+#define PRINTF_C
+
 //para printf
 #include "../../include/varargs.h"
 #include "../../include/stdarg.h"
@@ -117,3 +120,4 @@ static void printchar(char c){
 }
 
 //end myprintfcode
+#endif //PRINTF_C
