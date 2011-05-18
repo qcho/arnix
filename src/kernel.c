@@ -73,11 +73,7 @@ kmain()
 	init_int80();
 	init_in();
 	init_keyboard();
-	char c;
-        while(1)
-        {
-        	c=getchar();
-     		printf("%c",c);
-        }
+	
+	shell_start();
 
 }

@@ -1,3 +1,4 @@
+#include "stdio.h"
 #include "printf.c"
 
 char stream[100];
@@ -10,6 +11,7 @@ char getchar(){
 		stream[0]='\0';
 		while(stream[0]=='\0'){
 			__read(0,stream,100);
+			printf(stream);
 		}
 		c=*streamp;
 	}
