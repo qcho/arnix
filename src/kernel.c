@@ -73,6 +73,7 @@ kmain()
 	
 	init_descriptor_tables();
 	init_int80();
+	init_in();
 	init_keyboard();
 	
 
