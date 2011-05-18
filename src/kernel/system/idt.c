@@ -32,6 +32,7 @@ void init_descriptor_tables()
     memset(&interrupt_handlers, NULL, sizeof(isr_t)*256);
 }
 
+
 static void init_idt()
 {
     idt_ptr.limit = sizeof(idt_entry_t) * 256 -1;
@@ -100,6 +101,10 @@ static void init_idt()
     idt_set_gate(45, (uint32_t)irq13, 0x08, 0x8E);
     idt_set_gate(46, (uint32_t)irq14, 0x08, 0x8E);
     idt_set_gate(47, (uint32_t)irq15, 0x08, 0x8E);
+    
+    
+    idt_set_gate(0X80, (uint32_t)isr80h, 0x08, 0x8E);
+    
 
     idt_flush((uint32_t)&idt_ptr);
 }

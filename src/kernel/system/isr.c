@@ -9,6 +9,9 @@ void register_interrupt_handler(uint8_t n, isr_t handler) {
 }
 
 void isr_handler(registers_t regs) {
+    if(regs.int_no==-128){//cableo orrendo, pero por alguna razon me lo pone negativo
+    	regs.int_no*=-1;
+    	}
     if (interrupt_handlers[regs.int_no] != NULL) {
         isr_t handler = interrupt_handlers[regs.int_no];
         handler(regs);
