@@ -73,13 +73,11 @@ kmain()
 	init_int80();
 	init_in();
 	init_keyboard();
-	
-	char stream[10];
+	char c;
         while(1)
         {
-     		stream[0]='\0';
-     		__read(0,stream,10);
-     		printf(stream);
+        	c=getchar();
+     		printf("%c",c);
         }
 
 }
