@@ -2,6 +2,9 @@
 
 #include "../std/stdio.h"
 #include "../std/printf.c"
+#include "commands.h"
+
+
 
 char * name="user";
 char * pcname="thispc";
@@ -58,11 +61,12 @@ int execute(char* comand){
 	if(comand[0]=='\0'){
 		return 0;
 	}
-	if(comand[0]=='e'){
-		return -15;
+	main start=get_command(comand);
+	if(start==NULL){
+		printf("invalid comand: %s\n",comand);
+		return -1;
 	}
-	printf("invalid comand: %s\n",comand);
-	return -1;
+	return start(0,NULL);
 }
 
 int parseline(){
@@ -78,9 +82,14 @@ int parseline(){
 	return execute(comand)==-15;
 }
 
+int exit_shell(int argc,char* argv){
+	return -15;
+}
+
 
 void shell_start(){
 	int exit=0;
+	add_command("exit",exit_shell);
 	while(!exit)
 	{
 		printuser();
