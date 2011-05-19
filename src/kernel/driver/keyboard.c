@@ -1,6 +1,6 @@
 #include "../system/isr.h"
 #include "../../std/printf.c"
-#include "../system/in.h"
+#include "../system/in_out.h"
 #include "../system/keyboardlisteners.h"
 
 #define KEYBOARD 0x60
@@ -21,7 +21,7 @@
 
 char array[BUFFER_SIZE];
 
-buffer stdin;
+buffer_t stdin;
 
 char * actual_scan_code_table;
 char * SCAN_CODE_TABLES[4];
@@ -57,7 +57,7 @@ void IRQ1_handler(registers_t reg){
 	int tmp;
 	int i=inb(KEYBOARD);
 	if(activate(i)){
-		tmp=(stdin.end+1)%stdin.buffer_size;
+		tmp=(stdin.end+1)%stdin.size;
 		if(tmp!=stdin.start){
 			char c=actual_scan_code_table[i];
 			if(bloq_mayusc){
@@ -81,8 +81,8 @@ init_keyboard(){
 	register_interrupt_handler(IRQ1,IRQ1_handler);
 	stdin.start=stdin.end=0;
 	stdin.array=array;
-	stdin.buffer_size=BUFFER_SIZE;
-	add_in(0,&stdin);
+	stdin.size=BUFFER_SIZE;
+	add_in_out(0,&stdin);
         load_qcho_scancodes();
         bloq_mayusc=0;
         init_key_listeners();

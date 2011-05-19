@@ -1,8 +1,16 @@
 #include "screen.h"
+#include "../system/isr.h"
+#include "../system/in_out.h"
 
 // The VGA framebuffer starts at 0xB8000.
 int16_t *video_memory = (int16_t *)0xB8000;
 // Stores the cursor position.
+
+#define BUFFER_SIZE 100
+
+char array_out[BUFFER_SIZE];
+
+buffer_t stdout;
 
 #define SCREEN_SIZE_X 80
 #define SCREEN_SIZE_Y 25
@@ -155,22 +163,19 @@ void screen_clear()
     move_cursor();
 }
 
-// Outputs a null-terminated ASCII string to the screen.
-void screen_write(char *string)
-{
-    int i = 0;
-    while (string[i])
-    {
-        screen_put(string[i++]);
-    }
+
+void IRQ0_handler(registers_t reg){
+	int i;
+	for(i=0;stdout.start!=stdout.end;i++){
+		screen_put(stdout.array[stdout.start]);
+		stdout.start=(stdout.start+1)%stdout.size;
+	}
 }
 
-void screen_write_hex(int32_t n)
-{
-    // TODO: implement this yourself!
-}
-
-void screen_write_dec(int32_t n)
-{
-    // TODO: implement this yourself!
+void init_screen(){
+	register_interrupt_handler(IRQ0,IRQ0_handler);
+	stdout.start=stdout.end=0;
+	stdout.array=array_out;
+	stdout.size=BUFFER_SIZE;
+	add_in_out(1,&stdout);
 }

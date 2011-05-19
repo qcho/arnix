@@ -43,11 +43,5 @@
      **/
     void screen_clear();
 
-    /**
-     * Escribe la cadena de caracteres en pantalla.
-     * @param char *string: cadena de caracteres ASCII a escribir (finalizada en \0)
-     **/
-    void screen_write(char *string);
-
 
 #endif

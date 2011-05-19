@@ -4,12 +4,12 @@
 
 struct buffer_struct
 {
-	int buffer_size;
+	int size;
 	char * array;
 	int start;
 	int end;
 };
 
-typedef struct buffer_struct buffer;
+typedef struct buffer_struct buffer_t;
 
 #endif // IN_H
