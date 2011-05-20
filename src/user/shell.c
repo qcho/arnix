@@ -5,7 +5,7 @@
 #include "commands.h"
 
 #define NULL 0
-
+#define COMAND_LINE_MAX 400
 
 
 char * name="user";
@@ -59,39 +59,57 @@ printuser(){
 	printf("%s@%s:",name,pcname); 
 }
 
-int execute(char* comand){
+int execute(char* comand,int argcant,char * argvec[]){
 	if(comand[0]=='\0'){
 		return 0;
 	}
 	main start=get_command(comand);
-	if(start==0){
+	if(start==NULL){
 		printf("invalid comand: %s\n",comand);
 		return -1;
 	}
-	return start(0,NULL);
+	return start(argcant,argvec);
 }
 
 int parseline(){
 	char c;
 	int i=0;
-	char comand_line[300];
-	while((c=getchar())!='\n'){
+	char comand_line[COMAND_LINE_MAX];
+	while((c=getchar())!='\n' && i<COMAND_LINE_MAX){
 		comand_line[i]=c;
 		i++;
 	}
 	comand_line[i]='\0';
 	char* comand=strnormalise(comand_line);
-	return execute(comand)==-15;
+	int argcant=0;
+	char * argvec[50];
+	for(i=0;comand[i]!='\0';i++){
+		if(comand[i]==' '){
+			comand[i]='\0';
+			argvec[argcant]=&comand[i+1];
+			argcant++;
+		}
+	}
+	return execute(comand,argcant,argvec)==-15;
 }
 
-int exit_shell(int argc,char* argv){
+int exit_shell(int argc,char* argv[]){
 	return -15;
+}
+
+int echo_shell(int argc,char* argv[]){
+	int i;
+	for(i=0;i<argc;i++){
+		printf("%s\n",argv[i]);
+	}
+	return 0;
 }
 
 
 void shell_start(){
 	int exit=0;
-	add_command("exit",(main)exit_shell);
+	add_command("echo",echo_shell);	
+	add_command("exit",exit_shell);
 	while(!exit)
 	{
 		printuser();
