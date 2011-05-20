@@ -3,7 +3,7 @@
 #include "kernel/driver/screen.h"
 #include "kernel/system/idt.h"
 #include "kernel/driver/keyboard.h"
-#include "std/printf.c"
+//#include "std/printf.c"
 
 DESCR_INT idt[0x80];			/* IDT de 80 entradas*/
 IDTR idtr;				/* IDTR */
@@ -74,6 +74,7 @@ kmain()
 	init_in_out();
 	init_keyboard();
 	init_screen();
+	
 	
 	shell_start();
 

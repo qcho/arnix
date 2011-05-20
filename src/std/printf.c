@@ -1,13 +1,18 @@
+
 #ifndef PRINTF_C
 #define PRINTF_C
-
 //para printf
+
+#ifndef PUTCHAR_C
+#define PUTCHAR_C
+
+#include "putchar.c"
+
+#endif //PUTCHAR_C
 
 #include "../../include/varargs.h"
 #include "../../include/stdarg.h"
-#include "putchar.c"
 
-static void printf(char *format, ...);
 
 static void prints(char * string);
 
@@ -36,7 +41,7 @@ static void printf( char * formatString, ...) {
 			switch(*formatString){
 			case 'c' :
 				  integer = va_arg(args,char);
-				  putchar(integer);
+				 putchar(integer);
 				  break;
 			case 's':
 				  string = va_arg(args,char *);
@@ -111,7 +116,6 @@ char * numberBaseNtoString(unsigned int number, int base, char * out){
 
 	return out;
 }
-
 
 
 //end myprintfcode

@@ -1,6 +1,5 @@
 #include "isr.h"
 #include "int80.h"
-#include "../../std/printf.c"
 
 #define SUB_FUNC_VEC_SIZE 10
 

@@ -1,5 +1,4 @@
 #include "../system/isr.h"
-#include "../../std/printf.c"
 #include "../system/in_out.h"
 #include "../system/keyboardlisteners.h"
 
@@ -71,7 +70,7 @@ void IRQ1_handler(registers_t reg){
 			stdin.end=tmp;	
 		}else
 		{
-			printf("buffer lleno");//TODO cambiar por bip
+			//printf("buffer lleno");//TODO cambiar por bip
 		}
 	}
 	//printf("%d",i);

@@ -1,6 +1,5 @@
 #include "int80.h"
 #include "in_out.h"
-#include "../../std/printf.c"
 
 buffer_t * in_out_vector[10]; 
 

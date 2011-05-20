@@ -1,6 +1,6 @@
 #include "commands.h"
-#include "../std/printf.c"
 
+#define NULL 0
 #define COMMAND_MAX_CANT 20
 
 command_t command_list[COMMAND_MAX_CANT];

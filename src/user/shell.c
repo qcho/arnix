@@ -4,6 +4,8 @@
 #include "../std/printf.c"
 #include "commands.h"
 
+#define NULL 0
+
 
 
 char * name="user";
@@ -62,7 +64,7 @@ int execute(char* comand){
 		return 0;
 	}
 	main start=get_command(comand);
-	if(start==NULL){
+	if(start==0){
 		printf("invalid comand: %s\n",comand);
 		return -1;
 	}
@@ -89,7 +91,7 @@ int exit_shell(int argc,char* argv){
 
 void shell_start(){
 	int exit=0;
-	add_command("exit",exit_shell);
+	add_command("exit",(main)exit_shell);
 	while(!exit)
 	{
 		printuser();
