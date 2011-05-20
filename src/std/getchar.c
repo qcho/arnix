@@ -4,6 +4,7 @@
 char stream[100];
 char * streamp=stream;
 
+
 char getchar(){
 	char c=*streamp;
 	if(c=='\0'){
