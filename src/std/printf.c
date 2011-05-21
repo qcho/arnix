@@ -1,15 +1,18 @@
+
 #ifndef PRINTF_C
 #define PRINTF_C
-
 //para printf
+
+#ifndef PUTCHAR_C
+#define PUTCHAR_C
+
+#include "putchar.c"
+
+#endif //PUTCHAR_C
+
 #include "../../include/varargs.h"
 #include "../../include/stdarg.h"
-#include "../kernel/driver/screen.h"
 
-
-static void printchar(char c);
-
-static void printf(char *format, ...);
 
 static void prints(char * string);
 
@@ -20,7 +23,6 @@ static char * numberBaseNtoString(unsigned int number, int base, char * out);
 //myprintfcode
 
 static void printf( char * formatString, ...) {
-
 	int integer;
 	unsigned int unsigenedInteger;
 	char * string;
@@ -39,7 +41,7 @@ static void printf( char * formatString, ...) {
 			switch(*formatString){
 			case 'c' :
 				  integer = va_arg(args,char);
-				  printchar(integer);
+				 putchar(integer);
 				  break;
 			case 's':
 				  string = va_arg(args,char *);
@@ -49,7 +51,7 @@ static void printf( char * formatString, ...) {
 				  integer = va_arg(args,int);
 				  if(integer < 0){
 					  integer = -integer;
-					  printchar('-');
+					  putchar('-');
 				  }
 				  prints(numberBaseNtoString(integer,10,out));
 				  break;
@@ -66,11 +68,11 @@ static void printf( char * formatString, ...) {
 				  prints(numberBaseNtoString(unsigenedInteger,16,out));
 				  break;
 			case '%':
-				  printchar('%');
+				  putchar('%');
 				  break;
 			}
 		} else{
-			printchar(*formatString);
+			putchar(*formatString);
 		}
 		formatString++;
 	}
@@ -79,7 +81,7 @@ static void printf( char * formatString, ...) {
 
 static void prints(char * string){
 	while(*string != '\0'){
-		printchar(*string);
+		putchar(*string);
 		string++;
 	}
 }
@@ -115,9 +117,6 @@ char * numberBaseNtoString(unsigned int number, int base, char * out){
 	return out;
 }
 
-static void printchar(char c){
-	screen_put(c);
-}
 
 //end myprintfcode
 #endif //PRINTF_C
