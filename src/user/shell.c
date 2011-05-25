@@ -5,7 +5,7 @@
 #include "commands.h"
 
 #define NULL 0
-#define COMAND_LINE_MAX 400
+#define COMAND_LINE_MAX 1000
 
 
 char * name="user";
@@ -75,9 +75,15 @@ int parseline(){
 	char c;
 	int i=0;
 	char comand_line[COMAND_LINE_MAX];
-	while((c=getchar())!='\n' && i<COMAND_LINE_MAX){
+	while((c=getchar())!='\n' && i<COMAND_LINE_MAX-2){
 		comand_line[i]=c;
 		i++;
+	}
+	if(i>=COMAND_LINE_MAX-2){
+		printf("%c",'\n');
+		comand_line[i]='\n';
+		comand_line[i+1]='\0';
+		i+=2;
 	}
 	comand_line[i]='\0';
 	char* comand=strnormalise(comand_line);
