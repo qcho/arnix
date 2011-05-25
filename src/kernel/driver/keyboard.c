@@ -23,7 +23,11 @@ char array[BUFFER_SIZE];
 buffer_t stdin;
 
 char * actual_scan_code_table;
-char * SCAN_CODE_TABLES[4];
+
+char SCAN_CODE_TABLE[60]={'\x1B','@','1','2','3','4','5','6','7','8','9','0','-','+','\x08','\t','q','w','e','r','t','y','u','i','o','p','{','}','\n'
+    	,'@','a','s','d','f','g','h','j','k','l','ñ','@','@','@','@','z','x','c','v','b','n','m',',','.','@','@','@','@',' '};
+char SHIFT_SCAN_CODE_TABLE[60]={'\x1B','@','!','"','#','$','%','&','&','/','(',')','_','*','\x08','\t','Q','W','E','R','T','Y','U','I','O','P','[',']','\n'
+    	,'@','A','S','D','F','G','H','J','K','L','Ñ','@','@','@','@','Z','X','C','V','B','N','M',';',':','@','@','@','@',' '};
 
 int bloq_mayusc;
 
@@ -43,12 +47,12 @@ int bloq_mayusc_unpresed(){
 }
 
 int shift_presed(){
-	actual_scan_code_table=SCAN_CODE_TABLES[1];
+	actual_scan_code_table=SHIFT_SCAN_CODE_TABLE;
 	return 0;
 }
 
 int shift_relesed(){
-	actual_scan_code_table=SCAN_CODE_TABLES[0];
+	actual_scan_code_table=SCAN_CODE_TABLE;
 	return 0;
 }
 
@@ -82,7 +86,7 @@ init_keyboard(){
 	stdin.array=array;
 	stdin.size=BUFFER_SIZE;
 	add_in_out(0,&stdin);
-        load_qcho_scancodes();
+	actual_scan_code_table=SCAN_CODE_TABLE;
         bloq_mayusc=0;
         init_key_listeners();
         add_key_listener(LSHIFT_KEY_PRESED_SCAN_CODE, shift_presed);
@@ -90,18 +94,4 @@ init_keyboard(){
         add_key_listener(LSHIFT_KEY_RELESED_SCAN_CODE, shift_relesed);
         add_key_listener(RSHIFT_KEY_RELESED_SCAN_CODE, shift_relesed);
         add_key_listener(BLOQ_MAYUS_SCAN_CODE, bloq_mayusc_unpresed);
-}
-
-load_qcho_scancodes() {
-    SCAN_CODE_TABLES[0] = "@@1234567890-+\t@qwertyuiop{}\n@asdfghjkl@@@@@zxcvbnm,.";
-    SCAN_CODE_TABLES[0][1] = '\x1B'; // esc
-    SCAN_CODE_TABLES[0][14] = '\x08'; // backspace
-    SCAN_CODE_TABLES[0][15] = '\t'; // tab
-    SCAN_CODE_TABLES[0][57] = ' '; // space
-    SCAN_CODE_TABLES[1]="@@!\"#$%&/()=??\t@QWERTYUIOP[]\n@ASDFGHJKL@@@@@ZXCVBNM,.";
-    SCAN_CODE_TABLES[1][1] = '\x1B'; // esc
-    SCAN_CODE_TABLES[1][14] = '\x08'; // backspace
-    SCAN_CODE_TABLES[1][15] = '\t'; // tab
-    SCAN_CODE_TABLES[1][57] = ' '; // space
-    actual_scan_code_table=SCAN_CODE_TABLES[0];
 }

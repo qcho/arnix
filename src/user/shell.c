@@ -55,7 +55,7 @@ char * strnormalise(char * str){
 
 
 
-printuser(){
+void printuser(){
 	printf("%s@%s:",name,pcname); 
 }
 
