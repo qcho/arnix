@@ -7,7 +7,7 @@
 int16_t *video_memory = (int16_t *)0xB8000;
 // Stores the cursor position.
 
-#define BUFFER_SIZE 500
+#define BUFFER_SIZE 1000
 
 char array_out[BUFFER_SIZE];
 

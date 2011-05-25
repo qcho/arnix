@@ -75,15 +75,12 @@ int parseline(){
 	char c;
 	int i=0;
 	char comand_line[COMAND_LINE_MAX];
-	while((c=getchar())!='\n' && i<COMAND_LINE_MAX-2){
+	while((c=getchar())!='\n' && i<COMAND_LINE_MAX-3){
 		comand_line[i]=c;
 		i++;
 	}
-	if(i>=COMAND_LINE_MAX-2){
-		printf("%c",'\n');
-		comand_line[i]='\n';
-		comand_line[i+1]='\0';
-		i+=2;
+	if(i>=COMAND_LINE_MAX-3){
+		printf("\n");
 	}
 	comand_line[i]='\0';
 	char* comand=strnormalise(comand_line);
