@@ -77,7 +77,7 @@ void IRQ1_handler(registers_t reg){
 			//printf("buffer lleno");//TODO cambiar por bip
 		}
 	}
-	printf("%d-",i);
+	//printf("%d-",i);
 }
 
 init_keyboard(){
