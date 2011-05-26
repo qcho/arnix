@@ -3,6 +3,8 @@
 #include "kernel/driver/screen.h"
 #include "kernel/system/idt.h"
 #include "kernel/driver/keyboard.h"
+#include "kernel/system/keyboardlisteners.h"
+
 //#include "std/printf.c"
 
 DESCR_INT idt[0x80];			/* IDT de 80 entradas*/
@@ -31,6 +33,19 @@ void int_08() {
     	outb(0x64,0xFE);
     }
 */}
+
+
+void reset(){
+	outb(0x64,0xFE);
+}
+
+
+
+int cnrl_alt_supr_manager(){
+	reset();
+	return 0;
+}
+
 
 
 /**********************************************
@@ -74,7 +89,7 @@ kmain()
 	init_in_out();
 	init_keyboard();
 	init_screen();
-	
+	add_key_listener(3, 83, cnrl_alt_supr_manager);
 	
 	shell_start();
 
