@@ -17,24 +17,6 @@ int intro_flush(char * streampointer){
 	return 0;
 }
 
-void delete_stream_backspaces(){
-	int i, j;
-	for(i=0;stream[i]!='\0';i++){
-		if(stream[i]=='\b'){
-			for(j=i;stream[j]=='\b';j++);
-			if(stream[j]=='\0'){
-				stream[i+1]='\0';
-			}
-			stream[i]=stream[j];
-			stream[j]='\b';
-		}
-	}
-	i--;
-	for(;i>=0 && stream[i]=='\b';i--);
-	i++;
-	stream[i]='\0';
-}
-
 
 char getchar(){
 	char c=*streamout;
@@ -53,14 +35,14 @@ char getchar(){
 				printf(streamin);
 			}
 			else{
-				for(j=streamin-stream;j>=0 && stream[j]=='\b';j--);
-				if(j!=-1){
+				if(streamin > stream){
 					printf("\b");
-					stream[j]='\b';	
+					*streamin='\0';
+					streamin--;
 				}
+				*streamin='\0';
 			}
 		}
-		delete_stream_backspaces();
 		c=*streamout;
 	}
 	streamout++;

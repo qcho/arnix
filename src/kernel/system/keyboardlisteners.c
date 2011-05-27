@@ -1,7 +1,7 @@
 #include "keyboardlisteners.h"
 
 
-key_listener KEY_LISTENERS[MAX_SCAN_CODE][4];
+key_listener KEY_LISTENERS[4][MAX_SCAN_CODE];
 key_listener * actual_key_listeners;
 
 int mode0(){
