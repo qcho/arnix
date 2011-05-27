@@ -28,8 +28,6 @@ void init_descriptor_tables()
 {
     // Initialise the interrupt descriptor table.
     init_idt();
-    // Nullify all the interrupt handlers.
-    memset(&interrupt_handlers, NULL, sizeof(isr_t)*256);
 }
 
 
@@ -37,8 +35,6 @@ static void init_idt()
 {
     idt_ptr.limit = sizeof(idt_entry_t) * 256 -1;
     idt_ptr.base  = (uint32_t)&idt_entries;
-
-    memset(&idt_entries, NULL, sizeof(idt_entry_t)*256);
 
     // Remap the irq table.
     outb(0x20, 0x11);

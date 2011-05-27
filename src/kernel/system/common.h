@@ -19,9 +19,9 @@ typedef unsigned int   uint32_t;
 #define PORT_PIC2 0xA0
 #define SIGNAL_EOI 0x20
 
-
-void outb(uint16_t port, uint8_t value);
-uint8_t inb(uint16_t port);
-uint16_t inw(uint16_t port);
+extern void outw(uint16_t port, uint16_t value);
+extern void outb(uint16_t port, uint8_t value);
+extern uint8_t inb(uint16_t port);
+extern uint16_t inw(uint16_t port);
 
 #endif // COMMON_H
