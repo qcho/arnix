@@ -137,7 +137,7 @@ PRIVATE void do_scape_J() {
 }
 
 /* Map from ANSI colors to the attributes used by the PC */
-PRIVATE int ansi_colors[8] = {0, 4, 2, 6, 1, 5, 3, 7};
+PRIVATE uint8_t ansi_colors[8] = {0, 4, 2, 6, 1, 5, 3, 7};
     
 PRIVATE void do_scape_m() {
     int i;
@@ -158,10 +158,11 @@ PRIVATE void do_scape_m() {
                 case 5:
                     screen_settings |= 0x80;
             }
-        } else if (dec == 3) { /* background */
-            screen_settings = (screen_settings << 4) | (ansi_colors[u] & 0x0F);
-        } else if (dec == 4) { /* foreground */
-            screen_settings = (ansi_colors[u] << 4) | (screen_settings & 0x0F);
+        } else if (dec == 3) { /* foreground */
+            //print('3');
+            screen_settings = (0xF0 & screen_settings) | (0x0F & ansi_colors[u]);
+        } else if (dec == 4) { /* background */
+            screen_settings = (0x0F & screen_settings) | (ansi_colors[u] << 4);
         }
     }
 }
@@ -258,5 +259,5 @@ PUBLIC void init_screen(){
 	stdout.size=BUFFER_SIZE;
 	add_in_out(1,&stdout);
         screen_write("\x1B[2J");
-        screen_write("\x1B[34;47m");
+        //screen_write("\x1B[34;47m");
 }
