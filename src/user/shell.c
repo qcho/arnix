@@ -102,7 +102,8 @@ int echo_shell(int argc,char* argv[]){
 }
 
 int getCPUspeed_shell(){
-	int ips= __cpuspeed();
+	int ips;
+	__cpuspeed(&ips);
 	printf("Su procesador esta ejecutando %d instrucciones por segudo.\n",ips);
 	printf("La velocidad en MHz es:%d.%d MHz\n",(ips)/(1024*1024),((10*ips)/(1024*1024))%10);
 	return 0;
