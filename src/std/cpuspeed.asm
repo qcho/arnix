@@ -1,6 +1,7 @@
 global __cpuspeed
 
 __cpuspeed:
-	 mov eax,15
-	 int 80
+	 mov ebx, [esp+4]
+	 mov eax,5
+	 int 80h
 	 ret
