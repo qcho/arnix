@@ -13,43 +13,25 @@ char array_out[BUFFER_SIZE];
 
 buffer_t stdout;
 
+#define ESC '\x1B'
+#define BELL '\x07'
+
+#define DEFAULT_SETTINGS 0x07
+
 #define SCREEN_SIZE_X 80
 #define SCREEN_SIZE_Y 25
+uint8_t screen_state = 0; // 0=normal, 1=scaped, 2=parameters.
+
+#define SCREEN_MAX_PARAM_COUNT 16
+uint8_t screen_param_count = 0;
+int screen_param[SCREEN_MAX_PARAM_COUNT];
 
 uint8_t screen_cursor_x = 0;
 uint8_t screen_cursor_y = 0;
-uint8_t screen_settings;
-
-void screen_resetSettings() {
-    screen_setColours(BLACK, WHITE);
-}
-
-void screen_setBackColour(enum Colour colour) {
-    uint8_t backColour = (uint8_t)colour;
-    screen_settings = (backColour << 4) | (screen_settings & 0x0F);
-}
-
-void screen_setForeColour(enum Colour colour) {
-    uint8_t foreColour = (uint8_t)colour;
-    screen_settings = (screen_settings << 4) | (foreColour & 0x0F);
-}
-
-void screen_setColours(enum Colour colourBack, enum Colour colourFore) {
-    uint8_t backColour = (uint8_t)colourBack;
-    uint8_t foreColour = (uint8_t)colourFore;
-    screen_settings = (backColour << 4) | (foreColour & 0x0F);
-}
-
-int16_t screen_getCharWithSettings(uint8_t c, uint8_t settings) {
-    return c | (settings << 8);
-}
-
-int16_t screen_getCharWithCurrentSettings(uint8_t c) {
-    return screen_getCharWithSettings(c, screen_settings);
-}
+uint8_t screen_settings = DEFAULT_SETTINGS;
 
 // Updates the hardware cursor.
-static void move_cursor()
+PRIVATE void move_cursor()
 {
     // The screen is SCREEN_SIZE_X characters wide...
     int16_t cursorLocation = screen_cursor_y * SCREEN_SIZE_X + screen_cursor_x;
@@ -60,7 +42,7 @@ static void move_cursor()
 }
 
 // Scrolls the text on the screen up by one line.
-static void scroll()
+PRIVATE void scroll()
 {
 
     // Get a space character with the default colour attributes.
@@ -88,68 +70,45 @@ static void scroll()
     }
 }
 
-// Writes a single character out to the screen.
-void screen_put(char c)
-{
+PRIVATE void print(char c) {
     int16_t *location;
-
-    // Handle a backspace, by moving the cursor back one space
-    if (c == ASCII_BACKSPACE) {
-        if(screen_cursor_x) {
-            screen_cursor_x--;
-        } else if (screen_cursor_y) {
-            screen_cursor_x=SCREEN_SIZE_X-1;
-            screen_cursor_y--;
-        }
-        location = video_memory + (screen_cursor_y*SCREEN_SIZE_X + screen_cursor_x);
-        *location = screen_getCharWithCurrentSettings(' ');
-    }
-
-    // Handle a tab by increasing the cursor's X, but only to a point
-    // where it is divisible by 8.
-    else if (c == '\t')
-    {
-        screen_cursor_x = (screen_cursor_x+8) & ~(8-1);
-    }
-
-    // Handle carriage return
-    else if (c == '\r')
-    {
-        screen_cursor_x = 0;
-    }
-
-    // Handle newline by moving cursor back to left and increasing the row
-    else if (c == '\n')
-    {
-        screen_cursor_x = 0;
-        screen_cursor_y++;
-    }
-    // Handle any other printable character.
-    else if(c >= ' ')
-    {
-        location = video_memory + (screen_cursor_y*SCREEN_SIZE_X + screen_cursor_x);
-        *location = screen_getCharWithCurrentSettings(c);
-        screen_cursor_x++;
-    }
-
-    // Check if we need to insert a new line because we have reached the end
-    // of the screen.
-    if (screen_cursor_x >= SCREEN_SIZE_X)
-    {
+    location = video_memory + (screen_cursor_y*SCREEN_SIZE_X + screen_cursor_x);
+    *location = (c | (screen_settings << 8));
+    if (++screen_cursor_x >= SCREEN_SIZE_X) {
         screen_cursor_x = 0;
         screen_cursor_y ++;
     }
+}
 
-    // Scroll the screen if needed.
-    scroll();
-    // Move the hardware cursor.
-    move_cursor();
+PRIVATE void do_bell() {
+   // TODO
+}
 
+PRIVATE void do_backspace() {
+    if(screen_cursor_x) {
+        screen_cursor_x--;
+    } else if (screen_cursor_y) {
+        screen_cursor_x=SCREEN_SIZE_X-1;
+        screen_cursor_y--;
+    }
+    print(' ');
+}
+
+PRIVATE void do_lineFeed() {
+    screen_cursor_x = 0;
+    screen_cursor_y++;
+}
+
+PRIVATE void do_tab() {
+    screen_cursor_x = (screen_cursor_x+8) & ~(8-1);
+}
+
+PRIVATE void do_return() {
+    screen_cursor_x = 0;
 }
 
 // Clears the screen, by copying lots of spaces to the framebuffer.
-void screen_clear()
-{
+PRIVATE void screen_clear() {
     // Make an attribute byte for the default colours
     uint8_t attributeByte = (0 /*black*/ << 4) | (15 /*white*/ & 0x0F);
     int16_t blank = 0x20 /* space */ | (attributeByte << 8);
@@ -166,7 +125,120 @@ void screen_clear()
     move_cursor();
 }
 
-void IRQ0_handler(registers_t reg){
+PRIVATE void do_scape_J() {
+    if (screen_param[0] == 2) {
+        screen_clear();
+    }
+}
+
+/* Map from ANSI colors to the attributes used by the PC */
+PRIVATE int ansi_colors[8] = {0, 4, 2, 6, 1, 5, 3, 7};
+    
+PRIVATE void do_scape_m() {
+    int i;
+    for (i=0;i<screen_param_count;i++){
+        int a = screen_param[i]/10;
+        int b = screen_param[i]%10;
+        if (a == 0) {
+            switch(b){
+                case 0:
+                    screen_settings = DEFAULT_SETTINGS;
+                    break;
+                case 1:
+                    screen_settings |= 0x08;
+                    break;
+                case 4:
+                    screen_settings &= 0xBB;
+                    break;
+                case 5:
+                    screen_settings |= 0x80;
+            }
+        } else if (a == 3) { /* background */
+            screen_settings = (screen_settings << 4) | (ansi_colors[b] & 0x0F);
+        } else if (a == 4) { /* foreground */
+            screen_settings = (ansi_colors[b] << 4) | (screen_settings & 0x0F);
+        }
+    }
+}
+
+PRIVATE void do_scape(char c) {
+    switch(screen_state) {
+        case 1:
+            if (c == '[') {
+                screen_state = 2;
+                screen_param_count = 1;
+                int i=0;
+                for (;i<=SCREEN_MAX_PARAM_COUNT; i++) {
+                    screen_param[i] = 0;
+                }
+            } else {
+                screen_state = 0;
+            }
+            break;
+        case 2:
+            if (c >= '0' && c <= '9') {
+                screen_param[screen_param_count-1] = 10*screen_param[screen_param_count-1] + (c-'0');
+            } else if (c == ';') {
+                screen_param_count++;
+            } else {
+                switch (c) {
+                    case 'm':
+                        do_scape_m();
+                        break;
+                    case 'J':
+                        do_scape_J();
+                        break;
+                }
+                screen_state = 0;
+            }  
+            break;
+    }
+}
+
+// Writes a single character out to the screen.
+PUBLIC void screen_put(char c) {
+    if (screen_state > 0) {
+        do_scape(c);
+        return;
+    } else {
+        switch (c) {
+            case ESC:
+                screen_state = 1;
+                return;
+            case '\0':
+                return;
+            case BELL:
+                do_bell();
+                return;
+            case '\b':
+                do_backspace();
+                break;
+            case '\n':
+                do_lineFeed();
+                break;
+            case '\t':
+                do_tab();
+                break;
+            case '\r':
+                do_return();
+                break;
+            default:
+                print(c);
+                break;
+        }
+        scroll();
+        move_cursor();
+    }
+}
+
+PUBLIC void screen_write(char *string) {
+    int i = 0;
+    while (string[i]) {
+        screen_put(string[i++]);
+    }
+}
+
+PRIVATE void IRQ0_handler(registers_t reg){
 	int i;
 	for(i=0;stdout.start!=stdout.end;i++){
 		screen_put(stdout.array[stdout.start]);
@@ -174,10 +246,12 @@ void IRQ0_handler(registers_t reg){
 	}
 }
 
-void init_screen(){
+PUBLIC void init_screen(){
 	register_interrupt_handler(IRQ0,IRQ0_handler);
 	stdout.start=stdout.end=0;
 	stdout.array=array_out;
 	stdout.size=BUFFER_SIZE;
 	add_in_out(1,&stdout);
+        screen_write("\x1B[2J");
+        screen_write("\x1B[34;47m");
 }
