@@ -2,6 +2,11 @@ global outb
 global outw
 global inb
 global inw
+global getRDTSC
+
+getRDTSC:
+	rdtsc
+	ret
 
 outb:
 	mov dx, [esp+4]

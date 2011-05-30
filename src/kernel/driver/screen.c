@@ -2,6 +2,7 @@
 #include "../system/isr.h"
 #include "../system/in_out.h"
 #include "ascii.h"
+#include "timer.h"
 
 // The VGA framebuffer starts at 0xB8000.
 int16_t *video_memory = (int16_t *)0xB8000;
@@ -244,7 +245,7 @@ PUBLIC void screen_write(char *string) {
     }
 }
 
-PRIVATE void IRQ0_handler(registers_t reg){
+PRIVATE void timer_print(registers_t reg){
 	int i;
 	for(i=0;stdout.start!=stdout.end;i++){
 		screen_put(stdout.array[stdout.start]);
@@ -253,7 +254,7 @@ PRIVATE void IRQ0_handler(registers_t reg){
 }
 
 PUBLIC void init_screen(){
-	register_interrupt_handler(IRQ0,IRQ0_handler);
+	register_tick_subhandler(timer_print);
 	stdout.start=stdout.end=0;
 	stdout.array=array_out;
 	stdout.size=BUFFER_SIZE;

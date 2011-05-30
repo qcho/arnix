@@ -2,6 +2,8 @@
 
 #include "../std/stdio.h"
 #include "../std/printf.c"
+#include "../std/stdlib.h"
+
 #include "commands.h"
 #include "../kernel/driver/timer.h"
 
@@ -11,21 +13,6 @@
 
 char * name="user";
 char * pcname="thispc";
-
-void my_strcpy(char * str_des,char * str_ori){
-	int i;
-	for(i=0;str_ori[i]!='\0';i++){
-		str_des[i]=str_ori[i];
-	}
-	str_des[i]='\0';
-}
-
-int my_strlen(char* str){
-	int i;
-	for(i=0;str[i]!='\0';i++);
-	return i;
-}
-
 
 
 char * strnormalise(char * str){
@@ -41,13 +28,13 @@ char * strnormalise(char * str){
                 str=str+1;
         }
         //elimina espacios del final
-        for(i=my_strlen(str)-1;i>0 && str[i]==' ';i--){
+        for(i=strlen(str)-1;i>0 && str[i]==' ';i--){
                 str[i]='\0';
         }
         //elimina espacios repetidos en el medio
         for(j=0;str[j]!='\0';j++){
                 if(str[j]==' ' && str[j+1]==' '){
-                        my_strcpy(str + j, str + j + 1);
+                        strcpy(str + j, str + j + 1);
                         j--;
                 }
         }
@@ -79,6 +66,7 @@ int parseline(){
 		i++;
 	}
 	if(i>=COMAND_LINE_MAX-3){
+		while(getchar()!='\n');
 		printf("\n");
 	}
 	comand_line[i]='\0';
@@ -99,21 +87,7 @@ int parseline(){
 }
 
 int exit_shell(int argc,char* argv[]){
-	  long int ret1,ret2,ret3;
-	  int resp;
-	  double aux;
-	  
-	  asm ("rdtsc" : "=A"(ret1) );
-	  startTicks();
-	  while(getTicks()<=20);
-	  stopTicks();
-	  asm ("rdtsc" : "=A"(ret2) );
-	  ret3 = ret2-ret1;
-	  printf("%d\n",ret3);
-	  aux = (double)((ret3*1000)/(20*55*1024*1024));
-	  printf("%d",(int)aux);
-	  resp = (int)aux;
-	  printf("%d\n",resp);
+	  return -15;
 }
 
 int echo_shell(int argc,char* argv[]){
@@ -124,11 +98,29 @@ int echo_shell(int argc,char* argv[]){
 	return 0;
 }
 
+int getCPUspeed_shell(){
+	int k,j,t;
+	start_ticks();
+	k=getRDTSC();
+	while((t=get_ticks())<30);
+	k=getRDTSC()-k;
+	stop_ticks();
+	printf("Su procesador esta ejecutando %d instrucciones por segudo.\n",(k/t)*18+k/(t*5));
+	printf("La velocidad en MHz es:%d.%d MHz\n",((k/t)*18+k/(t*5))/(1024*1024),((10*((k/t)*18+k/(t*5)))/(1024*1024))%10);
+	return 0;
+}
+
+int clear_shell(){
+	printf("\x1B[2J");
+	return 0;
+}
 
 void shell_start(){
 	int exit=0;
 	add_command("echo",echo_shell);	
-	add_command("exit",exit_shell);
+	add_command("exit",exit_shell);	
+	add_command("getCPUspeed",getCPUspeed_shell);
+	add_command("clear",clear_shell);
 	while(!exit)
 	{
 		printuser();

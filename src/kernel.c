@@ -18,11 +18,14 @@ Punto de entrada de cóo C.
 *************************************************/
 
 kmain()
-{		
+{	
 	init_descriptor_tables();
 	init_int80();
 	init_in_out();
 	init_keyboard();
-	init_screen();	
+	init_timer_tick();
+	init_screen();
+	
+	
 	shell_start();
 }
