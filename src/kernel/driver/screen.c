@@ -73,10 +73,15 @@ PRIVATE void scroll()
 PRIVATE void print(char c) {
     int16_t *location;
     location = video_memory + (screen_cursor_y*SCREEN_SIZE_X + screen_cursor_x);
-    *location = (c | (screen_settings << 8));
-    if (++screen_cursor_x >= SCREEN_SIZE_X) {
-        screen_cursor_x = 0;
-        screen_cursor_y ++;
+    
+    if (c != '\b') {
+        *location = (c | (screen_settings << 8));
+        if (++screen_cursor_x >= SCREEN_SIZE_X) {
+            screen_cursor_x = 0;
+            screen_cursor_y ++;
+        }
+    } else {
+        *location = (' ' | (screen_settings << 8));
     }
 }
 
@@ -91,7 +96,7 @@ PRIVATE void do_backspace() {
         screen_cursor_x=SCREEN_SIZE_X-1;
         screen_cursor_y--;
     }
-    print(' ');
+    print('\b');
 }
 
 PRIVATE void do_lineFeed() {
