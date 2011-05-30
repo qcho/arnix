@@ -23,6 +23,8 @@ void int80_handler(registers_t regs){
 void nofunc(registers_t regs){
 }
 
+
+
 void init_int80(){
 	int i;
 	for(i=0;i<SUB_FUNC_VEC_SIZE;i++){

@@ -29,7 +29,7 @@ main get_command(char * name){
 }
 
 char * autocomplete(char * name){
-	int i,j;
+	int i,j,k;
 	int flag;
 	char ret[200];
 	for(i=0;i<200;i++){
@@ -46,9 +46,9 @@ char * autocomplete(char * name){
 			}
 		}
 		if(name[j]=='\0' && flag){
-			for(;command_list[i].name[j]!='\0' && ret[j]!='\0';j++){
-				if(ret[j]==' ' || ret[j]==command_list[i].name[j]){
-					ret[j]=command_list[i].name[j];
+			for(k=j;command_list[i].name[k]!='\0' && ret[k-j]!='\0';j++){
+				if(ret[k-j]==' ' || ret[k-j]==command_list[i].name[k]){
+					ret[k-j]=command_list[i].name[k];
 				}
 			}
 			ret[j]='\0';

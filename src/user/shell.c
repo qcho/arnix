@@ -5,7 +5,6 @@
 #include "../std/stdlib.h"
 
 #include "commands.h"
-#include "../kernel/driver/timer.h"
 
 #define NULL 0
 #define COMAND_LINE_MAX 1000
@@ -60,14 +59,10 @@ int execute(char* comand,int argcant,char * argvec[]){
 int parseline(){
 	char c;
 	int i=0;
-	int j;
 	char comand_line[COMAND_LINE_MAX];
 	while((c=getchar())!='\n' && i<COMAND_LINE_MAX-3){
 		if(c=='\t'){
-			for(j=strlen(comand_line);j>=0;j--){
-				printf("\b");
-			}
-			strcpy(comand_line,autocomplete(comand_line));
+			strcpy(comand_line[strlen(comand_line)],autocomplete(comand_line));
 			__write(0,comand_line,strlen(comand_line));
 		}
 		comand_line[i]=c;
@@ -107,14 +102,9 @@ int echo_shell(int argc,char* argv[]){
 }
 
 int getCPUspeed_shell(){
-	int k,j,t;
-	start_ticks();
-	k=getRDTSC();
-	while((t=get_ticks())<30);
-	k=getRDTSC()-k;
-	stop_ticks();
-	printf("Su procesador esta ejecutando %d instrucciones por segudo.\n",(k/t)*18+k/(t*5));
-	printf("La velocidad en MHz es:%d.%d MHz\n",((k/t)*18+k/(t*5))/(1024*1024),((10*((k/t)*18+k/(t*5)))/(1024*1024))%10);
+	int ips= __cpuspeed();
+	printf("Su procesador esta ejecutando %d instrucciones por segudo.\n",ips);
+	printf("La velocidad en MHz es:%d.%d MHz\n",(ips)/(1024*1024),((10*ips)/(1024*1024))%10);
 	return 0;
 }
 
