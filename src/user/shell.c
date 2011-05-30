@@ -53,10 +53,8 @@ char * strnormalise(char * str){
         return str;
 }
 
-
-
 void printuser(){
-	printf("%s@%s:",name,pcname); 
+	printf("\x1B[32m%s@%s:\x1B[0m",name,pcname); 
 }
 
 int execute(char* comand,int argcant,char * argvec[]){
@@ -83,17 +81,20 @@ int parseline(){
 		printf("\n");
 	}
 	comand_line[i]='\0';
-	char* comand=strnormalise(comand_line);
+	char* command=strnormalise(comand_line);
 	int argcant=0;
 	char * argvec[50];
-	for(i=0;comand[i]!='\0';i++){
-		if(comand[i]==' '){
-			comand[i]='\0';
-			argvec[argcant]=&comand[i+1];
+        int in_quotes = 0;
+	for(i=0;command[i]!='\0';i++){
+		if(command[i]==' ' && !in_quotes){
+			command[i]='\0';
+			argvec[argcant]=&command[i+1];
 			argcant++;
-		}
+                } else if (command[i]=='"') {
+                    in_quotes = !in_quotes;
+                }
 	}
-	return execute(comand,argcant,argvec)==-15;
+	return execute(command,argcant,argvec)==-15;
 }
 
 int exit_shell(int argc,char* argv[]){
