@@ -137,10 +137,10 @@ PRIVATE int ansi_colors[8] = {0, 4, 2, 6, 1, 5, 3, 7};
 PRIVATE void do_scape_m() {
     int i;
     for (i=0;i<screen_param_count;i++){
-        int a = screen_param[i]/10;
-        int b = screen_param[i]%10;
-        if (a == 0) {
-            switch(b){
+        int dec = screen_param[i]/10;
+        int u = screen_param[i]%10;
+        if (dec == 0) {
+            switch(u){
                 case 0:
                     screen_settings = DEFAULT_SETTINGS;
                     break;
@@ -153,10 +153,10 @@ PRIVATE void do_scape_m() {
                 case 5:
                     screen_settings |= 0x80;
             }
-        } else if (a == 3) { /* background */
-            screen_settings = (screen_settings << 4) | (ansi_colors[b] & 0x0F);
-        } else if (a == 4) { /* foreground */
-            screen_settings = (ansi_colors[b] << 4) | (screen_settings & 0x0F);
+        } else if (dec == 3) { /* background */
+            screen_settings = (screen_settings << 4) | (ansi_colors[u] & 0x0F);
+        } else if (dec == 4) { /* foreground */
+            screen_settings = (ansi_colors[u] << 4) | (screen_settings & 0x0F);
         }
     }
 }
