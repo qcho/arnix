@@ -26,6 +26,12 @@ extern isr_t interrupt_handlers[];
 // initialises the GDT and IDT.
 void init_descriptor_tables()
 {
+    /* Habilito interrupcion de timer tick*/
+    _Cli();
+    _mascaraPIC1(0xFE);
+    _mascaraPIC2(0xFF);
+    _Sti();
+    
     // Initialise the interrupt descriptor table.
     init_idt();
 }

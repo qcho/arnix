@@ -12,85 +12,17 @@ IDTR idtr;				/* IDTR */
 
 int tickpos=0;
 
-void int_08() {
-/*    screen_setForeColour(tickpos%15);
-
-    if (tickpos++ < 500) {
-
-// 	c s d u o x \n \t
-//  	printf("te%cst  ",'j');
-//  	printf("te%sst  ","leeol");
-//  	printf("te%dst  ",0);
-//  	printf("te%ust  ",3554);
-//	printf("%o",9);
-//	printf("\n");
-//	printf("%x",15);
-//	printf("\n");
-//  	printf("te\nst  ");
-//  	printf("te\tst  ");
-  	printf("te\\st  ");
-    } else {
-    	outb(0x64,0xFE);
-    }
-*/}
-
-
-void reset(){
-	outb(0x64,0xFE);
-}
-
-
-
-int cnrl_alt_supr_manager(){
-	reset();
-	return 0;
-}
-
-
-
 /**********************************************
 kmain()
 Punto de entrada de cóo C.
 *************************************************/
 
 kmain()
-{
-
-        int i,num;
-
-/* Borra la pantalla. */
-
-        screen_clear();
-//         screen_write("Hello, world!");
-        screen_setBackColour(LIGHT_GREY);
-
-/* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */
-
-	setup_IDT_entry (&idt[0x08], 0x08, (dword)&_int_08_hand, ACS_INT, 0);
-
-/* Carga de IDTR    */
-
-	idtr.base = 0;
-	idtr.base +=(dword) &idt;
-	idtr.limit = sizeof(idt)-1;
-
-	_lidt (&idtr);
-
-	_Cli();
-/* Habilito interrupcion de timer tick*/
-
-        _mascaraPIC1(0xFE);
-        _mascaraPIC2(0xFF);
-
-	_Sti();
-	
+{		
 	init_descriptor_tables();
 	init_int80();
 	init_in_out();
 	init_keyboard();
-	init_screen();
-	add_key_listener(3, 83, cnrl_alt_supr_manager);
-	
+	init_screen();	
 	shell_start();
-
 }

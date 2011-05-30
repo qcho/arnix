@@ -80,7 +80,17 @@ void IRQ1_handler(registers_t reg){
 	//printf("%d-",i);
 }
 
-init_keyboard(){
+PRIVATE void reset(){
+	outb(0x64,0xFE);
+}
+
+PRIVATE int cnrl_alt_supr_manager(){
+	reset();
+	return 0;
+}
+
+
+void init_keyboard(){
 	register_interrupt_handler(IRQ1,IRQ1_handler);
 	stdin.start=stdin.end=0;
 	stdin.array=array;
@@ -94,4 +104,6 @@ init_keyboard(){
         add_key_listener(-1,LSHIFT_KEY_RELESED_SCAN_CODE, shift_relesed);
         add_key_listener(-1,RSHIFT_KEY_RELESED_SCAN_CODE, shift_relesed);
         add_key_listener(-1,BLOQ_MAYUS_SCAN_CODE, bloq_mayusc_unpresed);
+        
+        add_key_listener(3, 83, cnrl_alt_supr_manager);
 }
