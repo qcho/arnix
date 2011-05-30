@@ -8,16 +8,10 @@
 #ifndef TIMER_H
 #define	TIMER_H
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
-
-
-
-#ifdef	__cplusplus
-}
-#endif
+void init_timer();
+int getTicks();
+void startTicks();
+void stopTicks();
 
 #endif	/* TIMER_H */
 
