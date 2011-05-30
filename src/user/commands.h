@@ -15,4 +15,6 @@ typedef struct command_struct command_t;
 void add_command(char * name,main function);
 main get_command(char * name);
 
+char * autocomplete(char * name);
+
 #endif //COMMANDS_H

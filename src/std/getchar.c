@@ -10,7 +10,7 @@ char * streamout=stream;
 
 
 int intro_flush(char * streampointer){
-	if(*streampointer=='\n' || 1>=STREAM_SIZE-(streampointer-stream)-1){
+	if(*streampointer=='\n' || *streampointer=='\t' || 1>=STREAM_SIZE-(streampointer-stream)-1){
 		return 1;
 	}
 	
@@ -31,10 +31,10 @@ char getchar(){
 			if(*streamin!='\0')
 				streamin++;
 			__read(0,streamin,1);
-			if(*streamin!='\b'){
+			if(*streamin!='\b' && *streamin!='\t'){
 				printf(streamin);
 			}
-			else{
+			else if(*streamin=='\b'){
 				if(streamin > stream){
 					printf("\b");
 					*streamin='\0';

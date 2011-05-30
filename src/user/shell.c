@@ -60,8 +60,16 @@ int execute(char* comand,int argcant,char * argvec[]){
 int parseline(){
 	char c;
 	int i=0;
+	int j;
 	char comand_line[COMAND_LINE_MAX];
 	while((c=getchar())!='\n' && i<COMAND_LINE_MAX-3){
+		if(c=='\t'){
+			for(j=strlen(comand_line);j>=0;j--){
+				printf("\b");
+			}
+			strcpy(comand_line,autocomplete(comand_line));
+			__write(0,comand_line,strlen(comand_line));
+		}
 		comand_line[i]=c;
 		i++;
 	}

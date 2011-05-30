@@ -28,4 +28,31 @@ main get_command(char * name){
 	return NULL;
 }
 
-
+char * autocomplete(char * name){
+	int i,j;
+	int flag;
+	char ret[200];
+	for(i=0;i<200;i++){
+		ret[i]=' ';
+	}
+	for(i=0;i<200 && name[i]!='\0';i++){
+		ret[i]=name[i];
+	}
+	for(i=0;i<commands_added;i++){
+		flag=1;
+		for(j=0;command_list[i].name[j]!='\0' && name[j]!='\0' ;j++){
+			if(command_list[i].name[j]!=name[j]){
+				flag=0;
+			}
+		}
+		if(name[j]=='\0' && flag){
+			for(;command_list[i].name[j]!='\0' && ret[j]!='\0';j++){
+				if(ret[j]==' ' || ret[j]==command_list[i].name[j]){
+					ret[j]=command_list[i].name[j];
+				}
+			}
+			ret[j]='\0';
+		}
+	}
+	return ret;
+}
