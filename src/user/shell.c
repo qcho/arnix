@@ -3,7 +3,7 @@
 #include "../std/stdio.h"
 #include "../std/printf.c"
 #include "commands.h"
-#include "timer.h"
+#include "../kernel/driver/timer.h"
 
 #define NULL 0
 #define COMAND_LINE_MAX 1000
@@ -105,7 +105,7 @@ int exit_shell(int argc,char* argv[]){
 	  
 	  asm ("rdtsc" : "=A"(ret1) );
 	  startTicks();
-	  while(getTicks()=<20);
+	  while(getTicks()<=20);
 	  stopTicks();
 	  asm ("rdtsc" : "=A"(ret2) );
 	  ret3 = ret2-ret1;
