@@ -97,7 +97,72 @@ int parseline(){
 }
 
 int exit_shell(int argc,char* argv[]){
-	return -15;
+	  long int ret1,ret2,ret3;
+	  
+	  long int li=15000076;
+	  int i=9800032;
+	  
+	  float fi = 5.5;
+	  double di = 5.5;
+	  int j ;
+	  j= (int)di;
+	  
+	  double a = 5.5;
+	  int b ;
+	  b = (int)a;
+	   printf("%d\n",b);
+	  printf("%d %d\n",3 , b);
+	  printf("%d\n",b);
+
+ 	  printf("%d\n",j);
+ 	  printf("%d\n",(int)di);
+ 	  printf("%d\n",(int)fi);
+	  asm ("rdtsc" : "=A"(ret1) );
+	  
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  asm ("xor %eax,%edx");
+	  asm("xor %edx,%eax");
+	  
+	  //30 xor me aseguran 30 timer ticks
+	  asm ("rdtsc" : "=A"(ret2) );
+	  printf("%d\n",ret1);
+	  printf("%d\n",ret2);
+	  ret3 = ret2-ret1;
+	  printf("%d\n",ret3);
+	  double aux;
+	  aux = (double)((ret3*1000000)/(30*0.055));
+	  int resp;
+	  resp = (int)aux;
+	  printf("%d\n",resp);
 }
 
 int echo_shell(int argc,char* argv[]){

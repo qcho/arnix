@@ -112,6 +112,7 @@ char * numberBaseNtoString(unsigned int number, int base, char * out){
 		out[index] = '\0';
 	} else {
 		out[0] = '0';
+		out[1] = '\0';
 	}
 
 	return out;
