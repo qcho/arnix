@@ -12,10 +12,6 @@ typedef unsigned short uint16_t;
 typedef   signed int   int32_t;
 typedef unsigned int   uint32_t;
 
-// Compiler defines
-#define PRIVATE static
-#define PUBLIC
-
 #define NULL ((void*)0)
 
 // PIC
@@ -27,7 +23,6 @@ extern void outw(uint16_t port, uint16_t value);
 extern void outb(uint16_t port, uint8_t value);
 extern uint8_t inb(uint16_t port);
 extern uint16_t inw(uint16_t port);
-
 extern uint32_t getRDTSC();
 
 #endif // COMMON_H

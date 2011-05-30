@@ -1,7 +1,6 @@
 #include "screen.h"
 #include "../system/isr.h"
 #include "../system/in_out.h"
-#include "ascii.h"
 #include "timer.h"
 
 // The VGA framebuffer starts at 0xB8000.
@@ -31,10 +30,7 @@ uint8_t screen_cursor_x = 0;
 uint8_t screen_cursor_y = 0;
 uint8_t screen_settings = DEFAULT_SETTINGS;
 
-// Updates the hardware cursor.
-PRIVATE void move_cursor()
-{
-    // The screen is SCREEN_SIZE_X characters wide...
+static void update_cursor() {
     int16_t cursorLocation = screen_cursor_y * SCREEN_SIZE_X + screen_cursor_x;
     outb(0x3D4, 14);                  // Tell the VGA board we are setting the high cursor byte.
     outb(0x3D5, cursorLocation >> 8); // Send the high cursor byte.
@@ -43,9 +39,7 @@ PRIVATE void move_cursor()
 }
 
 // Scrolls the text on the screen up by one line.
-PRIVATE void scroll()
-{
-
+static void scroll() {
     // Get a space character with the default colour attributes.
     uint8_t attributeByte = (0 /*black*/ << 4) | (15 /*white*/ & 0x0F);
     int16_t blank = 0x20 /* space */ | (attributeByte << 8);
@@ -71,7 +65,7 @@ PRIVATE void scroll()
     }
 }
 
-PRIVATE void print(char c) {
+static void print(char c) {
     int16_t *location;
     location = video_memory + (screen_cursor_y*SCREEN_SIZE_X + screen_cursor_x);
     
@@ -86,11 +80,11 @@ PRIVATE void print(char c) {
     }
 }
 
-PRIVATE void do_bell() {
+static void do_bell() {
    // TODO
 }
 
-PRIVATE void do_backspace() {
+static void do_backspace() {
     if(screen_cursor_x) {
         screen_cursor_x--;
     } else if (screen_cursor_y) {
@@ -100,47 +94,45 @@ PRIVATE void do_backspace() {
     print('\b');
 }
 
-PRIVATE void do_lineFeed() {
+static void do_lineFeed() {
     screen_cursor_x = 0;
     screen_cursor_y++;
 }
 
-PRIVATE void do_tab() {
+static void do_tab() {
     screen_cursor_x = (screen_cursor_x+8) & ~(8-1);
 }
 
-PRIVATE void do_return() {
+static void do_return() {
     screen_cursor_x = 0;
 }
 
 // Clears the screen, by copying lots of spaces to the framebuffer.
-PRIVATE void screen_clear() {
+static void screen_clear() {
     // Make an attribute byte for the default colours
     uint8_t attributeByte = (0 /*black*/ << 4) | (15 /*white*/ & 0x0F);
     int16_t blank = 0x20 /* space */ | (attributeByte << 8);
 
     int i;
-    for (i = 0; i < SCREEN_SIZE_X*SCREEN_SIZE_Y; i++)
-    {
+    for (i = 0; i < SCREEN_SIZE_X*SCREEN_SIZE_Y; i++) {
         video_memory[i] = blank;
     }
 
     // Move the hardware cursor back to the start.
-    screen_cursor_x = 0;
-    screen_cursor_y = 0;
-    move_cursor();
+    screen_cursor_x = screen_cursor_y = 0;
+    update_cursor();
 }
 
-PRIVATE void do_scape_J() {
+static void do_scape_J() {
     if (screen_param[0] == 2) {
         screen_clear();
     }
 }
 
 /* Map from ANSI colors to the attributes used by the PC */
-PRIVATE uint8_t ansi_colors[8] = {0, 4, 2, 6, 1, 5, 3, 7};
+static uint8_t ansi_colors[8] = {0, 4, 2, 6, 1, 5, 3, 7};
     
-PRIVATE void do_scape_m() {
+static void do_scape_m() {
     int i;
     for (i=0;i<screen_param_count;i++){
         int dec = screen_param[i]/10;
@@ -168,7 +160,7 @@ PRIVATE void do_scape_m() {
     }
 }
 
-PRIVATE void do_scape(char c) {
+static void do_scape(char c) {
     switch(screen_state) {
         case 1:
             if (c == '[') {
@@ -203,7 +195,7 @@ PRIVATE void do_scape(char c) {
 }
 
 // Writes a single character out to the screen.
-PUBLIC void screen_put(char c) {
+void screen_put(char c) {
     if (screen_state > 0) {
         do_scape(c);
         return;
@@ -234,18 +226,18 @@ PUBLIC void screen_put(char c) {
                 break;
         }
         scroll();
-        move_cursor();
+        update_cursor();
     }
 }
 
-PUBLIC void screen_write(char *string) {
+void screen_write(char *string) {
     int i = 0;
     while (string[i]) {
         screen_put(string[i++]);
     }
 }
 
-PRIVATE void timer_print(registers_t reg){
+static void timer_print(registers_t reg){
 	int i;
 	for(i=0;stdout.start!=stdout.end;i++){
 		screen_put(stdout.array[stdout.start]);
@@ -253,7 +245,7 @@ PRIVATE void timer_print(registers_t reg){
 	}
 }
 
-PUBLIC void init_screen(){
+void init_screen(){
 	register_tick_subhandler(timer_print);
 	stdout.start=stdout.end=0;
 	stdout.array=array_out;

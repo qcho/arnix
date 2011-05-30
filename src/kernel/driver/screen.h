@@ -31,7 +31,7 @@
  * 
  * Ej: Esc[34;47m (azul en fondo blanco)
  **/
-PUBLIC void screen_put(char c);
+void screen_put(char c);
 
 
 #endif
