@@ -153,7 +153,7 @@ int rename_shell(int argc,char* argv[]){
         printf("Usage: rename <newname>.\n");
         return -1;
     }
-    strcpy(name, argv[0]);
+    strncpy(name, argv[0], NAME_MAX_LENGTH);
 }
 
 

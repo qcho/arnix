@@ -31,13 +31,14 @@ void cpu_speed(registers_t regs){
 	unsigned long k,t;
 	count_ticks=1;
 	ticks=0;
+        int TICK_COUNT = 30;
 	_Sti();
 	k=getRDTSC();
-	while(ticks<30);
+	while(ticks<TICK_COUNT);
 	k=getRDTSC()-k;
 	_Cli();
 	count_ticks=0;
-	*((unsigned long*)regs.ebx)=(k/ticks)*18+k/(ticks*5);
+	*((unsigned long*)regs.ebx)=(k/TICK_COUNT)*18+k/(TICK_COUNT*5);
 }
 
 void init_timer_tick(){
