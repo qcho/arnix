@@ -1,9 +1,7 @@
-#include "printf.c"
 #include "../../src/std/string.h"
-#include "../../include/varargs.h"
-#include "../../include/stdarg.h"
+#include "stdio.h"
 
-int( readFromStr)(char *formatString, char *format, ...) {
+int sscanf(char *formatString, char *format, ...) {
 	va_list ap;
 	va_start ( ap, format );
 	float *f;
@@ -32,7 +30,7 @@ int( readFromStr)(char *formatString, char *format, ...) {
 				break;
 			case 's':
 				a = va_arg ( ap, char * );
-				strncpy(buf, a);
+				strcpy(buf, a);
 				break;
 			}
 			conv++;

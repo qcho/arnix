@@ -8,20 +8,19 @@
 command_t command_list[COMMAND_MAX_CANT];
 int commands_added=0;
 
-char** get_command_list() {
-    char* commands[COMMAND_MAX_CANT];
-    int i;
-    for(i=0;i<commands_added;i++) {
-        commands[i] = command_list[i].name;
-    }
-    commands[i] = NULL;
-    return commands;
+command_t * get_command_list() {
+    return command_list;
 }
 
-void add_command(char * name,main function){
+int get_commands_added() {
+    return commands_added;
+}
+
+void add_command(char * name,main function,char* helpDescription){
 	if(commands_added<COMMAND_MAX_CANT){
 		command_list[commands_added].name=name;
 		command_list[commands_added].start=function;
+                command_list[commands_added].help=helpDescription;
 		commands_added++;
 	}
 }

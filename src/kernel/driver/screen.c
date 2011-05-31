@@ -100,7 +100,7 @@ static void do_lineFeed() {
 }
 
 static void do_tab() {
-    screen_cursor_x = (screen_cursor_x+8) & ~(8-1);
+    screen_cursor_x = (screen_cursor_x+4) & ~(4-1);
 }
 
 static void do_return() {

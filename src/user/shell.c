@@ -7,14 +7,19 @@
 
 #define NULL 0
 #define COMAND_LINE_MAX 1000
+#define EXIT_SYSTEM -15
 
 #define HISTORY_MAX 20
+
+/*
 char* history[HISTORY_MAX][COMAND_LINE_MAX];
 int history_current = 0;
 int history_count = 0;
+*/
 
-char * name="user";
-char * pcname="thispc";
+#define NAME_MAX_LENGTH 50
+char name[NAME_MAX_LENGTH]="unknown";
+char * pcname="itba";
 
 
 char * strnormalise(char * str){
@@ -44,7 +49,7 @@ char * strnormalise(char * str){
 }
 
 void printuser(){
-	printf("\x1B[32m%s@%s:\x1B[0m",name,pcname); 
+	printf("\x1B[36;1m%s@%s:~$ \x1B[0m",name,pcname); 
 }
 
 int execute(char* comand,int argcant,char * argvec[]){
@@ -85,56 +90,105 @@ int parseline(){
                     in_quotes = !in_quotes;
                 }
 	}
-	return execute(command,argcant,argvec)==-15;
+	return execute(command,argcant,argvec) == EXIT_SYSTEM;
 }
 
 int exit_shell(int argc,char* argv[]){
-	  return -15;
+	  return EXIT_SYSTEM;
 }
 
 int echo_shell(int argc,char* argv[]){
-	int i;
-	for(i=0;i<argc;i++){
-		printf("%s\n",argv[i]);
-	}
-	return 0;
-}
-
-int getCPUspeed_shell(){
-	unsigned long ips;
-	__cpuspeed(&ips);
-	//printf("Su procesador esta ejecutando %d instrucciones por segudo.\n",ips);
-	printf("La velocidad en MHz es:%d.%d MHz\n",(ips)/(1024*1024),((10*ips)/(1024*1024))%10);
-	return 0;
-}
-
-int clear_shell(){
-	printf("\x1B[2J");
-	return 0;
-}
-
-int help_shell(){
-    printf("These are the commands available: \n");
-    char** commands = get_command_list();
-    int i = 0;
-    while(commands[i]) {
-        printf("\x1B[4m%s\x1B[0m\t\n", commands[i++]);
+    int i;
+    for(i=0;i<argc;i++){
+            printf("%s\n",argv[i]);
     }
+    printf("\n");
     return 0;
 }
 
+int getCPUspeed_shell(int argc,char* argv[]){
+    unsigned long ips;
+    __cpuspeed(&ips);
+    //printf("Su procesador esta ejecutando %d instrucciones por segudo.\n",ips);
+    printf("The CPU speed is: %d.%d MHz\n",(ips)/(1024*1024),((10*ips)/(1024*1024))%10);
+    return 0;
+}
+
+int clear_shell(int argc,char* argv[]){
+    printf("\x1B[2J");
+    return 0;
+}
+
+int isodd_shell(int argc,char* argv[]) {
+    if (argc < 1){
+        printf("Usage: isodd <number>\n");
+        return -1;
+    }
+    printf("Number %s", argv[0]);
+    
+    int number;
+    sscanf("%d", argv[0], &number);
+    printf("int %d", number);
+    /*
+    if (number%2 = 1) {
+        printf('The number %d is ODD', number);
+    } else {
+        printf('The number %d is NOT ODD, its EVEN.', number);
+    }
+    return 0;
+     */
+}
+
+int help_shell(int argc,char* argv[]){
+    printf("\x1B[33mThese are the commands available: \x1B[0m\n\n");
+    command_t *commands = get_command_list();
+    int i = 0;
+    while(i<get_commands_added()) {
+        printf("\x1B[4m%s\x1B[0m\t\t%s\n", commands[i].name, commands[i].help);
+        i++;
+    }
+    printf("\n");
+    return 0;
+}
+
+int rename_shell(int argc,char* argv[]){
+    if (argc < 1){
+        printf("Usage: rename <newname>.\n");
+        return -1;
+    }
+    strcpy(name, argv[0]);
+}
+
+
+
 void shell_start(){
-	int exit=0;
-	add_command("echo", echo_shell);	
-	add_command("exit", exit_shell);	
-	add_command("getCPUspeed", getCPUspeed_shell);
-	add_command("clear", clear_shell);
-        add_command("help", help_shell);
-	while(!exit)
-	{
-		printuser();
-		exit=parseline();
-	}
+    int exit=0;
+    add_command("rename", rename_shell, "changes the name of the user of this pc");
+    add_command("echo", echo_shell, "echoes some text, don't forget the quotes (\") if you use spaces");	    
+    add_command("clear", clear_shell, "clears the screen");
+    add_command("help", help_shell, "shows help");
+    add_command("isodd", isodd_shell, "tells if the number is odd or not");
+    add_command("exit", exit_shell, "exits the system.");
+    add_command("getCPUspeed", getCPUspeed_shell, "shows actual CPU speed");
+    do{
+        printf("\x1B[33mHi! Whats your name? \x1B[0m");
+        char c = '\0';
+        int i = 0;
+        while((c=getchar())!='\n' && i < NAME_MAX_LENGTH){
+            name[i++]= c;
+        }
+        name[i]='\0';
+        if(i == NAME_MAX_LENGTH) {
+            while (getchar()!='\n');
+        }
+        printf("\x1B[2J\x1B[33mWelcome to arnix (ARg uNIX) %s!\x1B[0m\n\nYou may type \x1B[1mhelp\x1B[0m for more information\n\n", name);
+        while(!exit)
+        {
+            printuser();
+            exit=parseline();
+        }
+        exit=0;
+    }while(1);
 }
 
 
