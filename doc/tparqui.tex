@@ -1,0 +1,244 @@
+\documentclass[a4paper,14.49998pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{t1enc}
+\usepackage[pdftex]{graphicx}
+\usepackage[spanish]{babel}
+\usepackage{multicol}
+\usepackage{fancybox}
+\usepackage{fancyhdr}
+\usepackage[pdftex,usenames,dvipsnames]{color}
+\usepackage{listings}
+\usepackage{ucs}
+\usepackage{textcomp}
+\lstset{
+	tabsize=4,
+	rulecolor=,
+	language=matlab,
+        basicstyle=\scriptsize,
+        upquote=true,
+        aboveskip={1.5\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941}
+}
+\pagenumbering{arabic}
+\pagestyle{fancy}
+\fancyhead[L]{Arqui}
+\fancyhead[C]{curso 2011 primer cuatrimestre}
+\fancyhead[R]{TP Especial}
+\title{\Huge{Arquitectura de las Computadoras\\\vspace{15mm}TP Especial 2011\\\vspace{15mm}Modo protegido con GRUB}}
+\begin{document}
+\maketitle
+\vspace{70mm}
+\large{\underline{Autores:}} 
+\begin{center}
+\begin{tabular}{l r}
+\emph{\author{Axel Wassington}} & Legajo: \emph{50124}\\
+\emph{\author{Horacio Miguel Gomez}} & Legajo: \emph{50825}\\
+\emph{\author{Tomás Mehdi}} & Legajo: \emph{51014}
+\end{tabular}
+\end{center}
+
+\pagebreak
+\tableofcontents
+\pagebreak
+
+\section{Abstract}
+El TP Especial consta de un sistema booteable con GRUB instalado, el cual debe
+obtener de disco una imagen binaria que correra en Modo protegido. El mismo provee al usuario 
+de un shell en el cual puede ejecutar comandos. Similar a Unix/Linux utilizamos la INT80h, 
+mediante la cual se pueden ejecutar las instrucciones de assembler IN, OUT y otras.
+Al presionar CTRL+ALT+SUPR el sistema se reinicia.
+
+\section{Manual de uso}
+Esta seccion esta destinada a proporcionar información sobre las funcionalidades
+del sistema y explicar su modo de uso.
+\subsection{Booteo}
+El sistema es booteable, por lo que para su inicio solamente se requiere que el CD
+se encuentre insertado y la lectora posea la mayor prioridad de booteo. Luego se
+mostrará la pantalla de GRUB. Se puede presionar
+enter para proceder, o de lo contrario GRUB continuar á la carga del sistema tras un
+número prestablecido de segundos, visible en el ultimo renglón de la pantalla. Una vez realizado 
+el booteo, se cargará el shell. A partir de
+aquí se puede comenzar a utilizar los comandos provistos por el shell.
+\subsection{Comandos de shell}
+La siguiente lista indica la forma de usar a los distintos comandos de el shell.
+Es importante destacar que todos las llamadas son case sensitive. En caso
+de ingresar un comando que no esta contemplado por el shell se imprime un
+mensaje de error y se devuelve el control al usuario.
+\subsubsection{cpuspeed}
+Muestra la frecuencia de trabajo del CPU, usando la funcion RDTSC(Read Time-Stamp Counter) de 
+assembler la cual retorna la cantidad de instrucciones realizada hasta el momento desde el
+inicio del procesador y el PIT(Programable Interval Timer). El PIT es un periferico conectado
+a la IRQ0 del the master PIC. Utilizando estos elementos podemos obtener una cantidad de
+instrucciones en un intervalo de tiempo. La forma de hacerlo es obteniendo un RDTSC, dejar pasar
+un tiempo fijo y volver a obtener un RDTSC. El tiempo fijo lo generamos con una cantidad coherente
+de timer ticks, para ello no debe ser muy pequeña. Ya teniendo estos datos solo falta hacer 
+simples cuentas que nos devolveran la velocidad del CPU en MHz.
+\subsubsection{clear}
+Limpia la pantalla.
+\subsubsection{echo}
+Recice una cadena de caracteres luego del nombre del comando e imprime dicha cadena.
+\subsubsection{exit}
+Cierra el shell.
+\pagebreak
+\section{INT80h}
+Similar a la INT80h de Unix/Linux la INT80h de Arnix segun el valor en el registro EAX elige una instruccion.
+Las instrucciones que puede realizar son las siguientes:
+\begin{enumerate}
+\item Con el valor 3 en EAX hace un read usando los valores de EBX, ECX y EDX. En estos regristros debe
+estar el tamaño de lo que se va a leer, el source buffer y un file descriptor(de donde leer) respectivamente.
+
+\item Con el valor 4 en EAX hace un write usando los valores de EBX, ECX y EDX. En estos regristros debe
+estar el tamaño de lo que se va a escribir, el source buffer y un file descriptor(donde esribir) 
+respectivamente.
+
+\item Con el valor 5 en EAX hace un rdtsc guardando el valor en el registro EBX.
+\end{enumerate}
+\pagebreak
+\section{Codigos fuente}
+
+\subsection{include}
+\subitem{defs.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/include/defs.h}
+\subitem{kasm.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/include/kasm.h}
+\subitem{kc.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/include/kc.h}
+\subitem{kernel.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/include/kernel.h}
+\subitem{stdarg.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/include/stdarg.h}
+\subitem{varargs.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/include/varargs.h}
+
+
+\subsection{src}
+
+\subsubsection{kernel}
+\subitem{kernel.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel.c}
+% \subitem{lib.asm}
+% \lstinputlisting[language=csh]{/home/tmehdi/arnix/src/libasm.asm}
+\subitem{lib.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/libc.c}
+\subitem{loader.asm}
+\lstinputlisting[language=csh]{/home/tmehdi/arnix/src/loader.asm}
+\subsubsection{driver}
+% \subitem{keyboard.c}
+% \lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/driver/keyboard.c}
+\subitem{keyboard.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/driver/keyboard.h}
+\subitem{screen.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/driver/screen.c}
+\subitem{screen.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/driver/screen.h}
+\subitem{timer.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/driver/timer.c}
+\subitem{timer.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/driver/timer.h}
+\subsubsection{system}
+\subitem{common.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/system/common.h}
+\subitem{idt.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/system/idt.c}
+\subitem{idt.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/system/idt.h}
+\subitem{in\_out.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/system/in_out.c}
+\subitem{in\_out.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/system/in_out.h}
+\subitem{int80.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/system/int80.c}
+\subitem{int80.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/system/int80.h}
+\subitem{isr.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/system/isr.c}
+\subitem{isr.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/system/isr.h}
+\subitem{keyboardlisteners.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/system/keyboardlisteners.h}
+\subitem{keyboardlisteners.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/kernel/system/keyboardlisteners.h}
+\subsubsection{asm}
+\subitem{idt.asm}
+\lstinputlisting[language=csh]{/home/tmehdi/arnix/src/kernel/system/asm/idt.asm}
+\subitem{common.asm}
+\lstinputlisting[language=csh]{/home/tmehdi/arnix/src/kernel/system/asm/common.asm}
+
+
+
+\subsubsection{std}
+\subitem{getchar.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/std/getchar.c}
+\subitem{printf.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/std/printf.c}
+\subitem{scanf.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/std/scanf.c}
+\subitem{stdio.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/std/stdio.h}
+\subitem{string.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/std/string.c}
+\subitem{string.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/std/string.h}
+\subitem{systemcall.asm}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/std/systemcall.asm}
+\subitem{systemcall.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/std/systemcall.h}
+
+\subsubsection{user}
+\subitem{commands.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/user/commands.c}
+\subitem{commands.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/user/commands.h}
+\subitem{shell.c}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/user/shell.c}
+\subitem{shell.h}
+\lstinputlisting[language=C]{/home/tmehdi/arnix/src/user/shell.h}
+
+
+\pagebreak
+
+\section{Referencias}
+Esta sección detalla las distintas fuentes de información utilizadas para
+el desarrollo del TP Especial.
+\subsection{Interrupciones}
+El manejo de interrupciones es similar al usado en el siguiente tutorial:
+\begin{center}
+http://www.jamesmolloy.co.uk/tutorial\_html/4.-The\%20GDT\%20and\%20IDT.html\\
+\end{center}
+Nos pareció interesante la opción de crear un wrapper para las idt y luego desde
+C simplemente asignar handlers a las convenientes, un wrapper se encarga de que a 
+C le lleguen los parametros.También creimos importante tener las entrys para las 
+primeras 31 exceptions del procesador, para evitar resets si por ejemplo dividimos por cero.
+
+\subsection{Pantalla}
+Nos basamos en la implementación de Linux, la pantalla puede recibir scape chars para 
+limpiar la pantalla, o imprimir en colores. Esto era conveniente debido a que al 
+utilizar la int80, no necesitamos parametros extra, para estas funcionalidades extra.
+
+\subsection{Reboot}
+Luego de probar soluciones sucias, como hacer que el procesador triple-faultee y 
+se reinicie la pc. Encontrámos la solucion de enviar la señal de reset desde el 
+controlador de teclado en:
+\begin{center}
+http://wiki.osdev.org/Reboot
+\end{center}
+\subsection{Paginas web utilizadas}
+Estos son los puntos de encuentro mas fuertes, esta información fue informada por mail 
+previo a la entrega. En generál leimos bastante de:
+\begin{center}http://wiki.osdev.org/Main\_Page ( y sus foros )\\
+http://www.jamesmolloy.co.uk/tutorial\_html/index.html\\
+http://www.osdever.net/tutorials/view/brans-kernel-development-tutorial\\
+\end{center}
+\end{document}

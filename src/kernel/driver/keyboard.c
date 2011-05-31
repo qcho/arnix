@@ -18,10 +18,14 @@ buffer_t stdin;
 
 char * actual_scan_code_table;
 
-char SCAN_CODE_TABLE[60]={'\x1B','@','1','2','3','4','5','6','7','8','9','0','-','+','\x08','\t','q','w','e','r','t','y','u','i','o','p','{','}','\n'
-    	,'@','a','s','d','f','g','h','j','k','l','ñ','@','@','@','@','z','x','c','v','b','n','m',',','.','@','@','@','@',' '};
-char SHIFT_SCAN_CODE_TABLE[60]={'\x1B','@','!','"','#','$','%','&','&','/','(',')','_','=','\x08','\t','Q','W','E','R','T','Y','U','I','O','P','[',']','\n'
-    	,'@','A','S','D','F','G','H','J','K','L','Ñ','"','@','@','@','Z','X','C','V','B','N','M',';',':','/','@','@','@',' '};
+char SCAN_CODE_TABLE[60]={'\x1B','@','1','2','3','4','5','6','7','8','9','0','-','+',
+		'\x08','\t','q','w','e','r','t','y','u','i','o','p','{','}','\n'
+    	,'@','a','s','d','f','g','h','j','k','l','ñ','@','@','@','@','z','x','c','v',
+    	'b','n','m',',','.','@','@','@','@',' '};
+char SHIFT_SCAN_CODE_TABLE[60]={'\x1B','@','!','"','#','$','%','&','&','/','(',')','_',
+		'=','\x08','\t','Q','W','E','R','T','Y','U','I','O','P','[',']','\n'
+    	,'@','A','S','D','F','G','H','J','K','L','Ñ','"','@','@','@','Z','X','C','V',
+    	'B','N','M',';',':','/','@','@','@',' '};
 
 int shift;
 int bloq_mayusc;
@@ -37,7 +41,7 @@ int bloq_mayusc_presed(){
 
 int bloq_mayusc_unpresed(){
 	bloq_mayusc=1;
-        add_key_listener(-1,BLOQ_MAYUS_SCAN_CODE, bloq_mayusc_presed); 
+        add_key_listener(-1,BLOQ_MAYUS_SCAN_CODE, bloq_mayusc_presed);
 	return 0;
 }
 
@@ -70,7 +74,7 @@ void IRQ1_handler(registers_t reg){
 				}
 			}
 			stdin.array[stdin.end]=c;
-			stdin.end=tmp;	
+			stdin.end=tmp;
 		} else {
                     //TODO: beep
 		}
@@ -101,6 +105,6 @@ void init_keyboard(){
         add_key_listener(-1,LSHIFT_KEY_RELESED_SCAN_CODE, shift_relesed);
         add_key_listener(-1,RSHIFT_KEY_RELESED_SCAN_CODE, shift_relesed);
         add_key_listener(-1,BLOQ_MAYUS_SCAN_CODE, bloq_mayusc_unpresed);
-        
+
         add_key_listener(3, 83, cnrl_alt_supr_manager);
 }
