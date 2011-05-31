@@ -1,41 +1,58 @@
 #include "../../src/std/string.h"
 #include "stdio.h"
 
-int sscanf(char *formatString, char *format, ...) {
+static int isNumber(char c) {
+    return (c >= '0' && c <= '9');
+}
+
+int sscanf(char *stream, char *format, ...) {
 	va_list ap;
 	va_start ( ap, format );
-	float *f;
-	int conv = 0, *integer, index, resp = 0,j;
-	char *a, *fp, *sp = formatString, buf[256] = { '\0' };
-
-	for (fp = formatString; *fp != '\0'; fp++) {
-		for (index = 0; *sp != '\0' && *sp != ' '; index++) {
-			buf[index] = *sp++;
-		}
-		buf[index] = '\0';
-		while (*sp == ' ') {
-			sp++;
-		}
-		while (*fp != '%') {
-			fp++;
-		}
-		if (*fp == '%') {
-			switch (*++fp) {
-			case 'd':
-				integer = va_arg ( ap, int * );
-				for (j = 0; *fp != '\0' && *fp != ' '; fp++, j++) {
-					resp += ((*fp) - '0') * (10 ^ j);
-				}
-				*integer = resp;
-				break;
-			case 's':
-				a = va_arg ( ap, char * );
-				strcpy(buf, a);
-				break;
-			}
-			conv++;
-		}
-	}
-	va_end ( ap );
-	return conv;
+        int i = 0;
+        int j = 0;
+        int converted;
+        
+        int *integer, iTmp;
+        char* string;
+        char *chr;
+        
+        while (format[i]) {
+            if (format[i] == '%') {
+                i++;
+                switch(format[i++]) {
+                    case 'c':
+                        chr = va_arg(ap, char*);
+                        *chr = stream[j++];
+                        break;
+                    case 'd':
+                        integer = va_arg(ap, int *);
+                        iTmp = 0;
+                        while (isNumber(stream[j])) {
+                            iTmp = iTmp*10+(stream[j]-'0');
+                            j++;
+                        }
+                        *integer = iTmp;
+                        break;
+                    case 's':
+                        string = va_arg(ap, char *);
+                        iTmp = 0;
+                        while (stream[j] != ' ') {
+                            string[iTmp++] = stream[j++];
+                        }
+                        string[iTmp] = '\0';
+                        break;
+                    default:
+                        // WRONG %X
+                        return converted;
+                }
+            } else {
+                if(format[i] == stream[j]) {
+                    i++;
+                    j++;
+                } else {
+                    //WRONG FORMAT STRING
+                    return converted;
+                }
+            }
+        }
 }

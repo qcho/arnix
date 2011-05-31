@@ -124,19 +124,16 @@ int isodd_shell(int argc,char* argv[]) {
         printf("Usage: isodd <number>\n");
         return -1;
     }
-    printf("Number %s", argv[0]);
-    
     int number;
-    sscanf("%d", argv[0], &number);
-    printf("int %d", number);
-    /*
-    if (number%2 = 1) {
-        printf('The number %d is ODD', number);
+    sscanf(argv[0], "%d", &number);
+
+    if (number%2 == 1) {
+        printf("The number %d is ODD", number);
     } else {
-        printf('The number %d is NOT ODD, its EVEN.', number);
+        printf("The number %d is NOT ODD, its EVEN.", number);
     }
+    printf("\n");
     return 0;
-     */
 }
 
 int help_shell(int argc,char* argv[]){
