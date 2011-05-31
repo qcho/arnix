@@ -116,14 +116,7 @@ a la IRQ0 del master PIC. Utilizando estos elementos podemos obtener una cantida
 instrucciones en un intervalo de tiempo. La forma de hacerlo es pidiendo un RDTSC, dejar pasar
 un tiempo fijo y volver a pedir un RDTSC. El tiempo fijo lo generamos con una cantidad coherente
 de timer ticks, para ello no debe ser muy pequeña. Ya teniendo estos datos solo falta hacer 
-algunas cuentas que nos devolveran la velocidad del CPU en MHz. Dichas cuentas son para hacer
-el calculo mas presiso, hacer la resta entre los 2 valores de RDTSC en orden de 
-obtencion(el primero menos el segundo) multiplicado por 18(cantidad de ticks para 
-alcanzar 1 segundo) dividido la cantidad de ticks que utilizamos y a eso sumado la resta en orden
-de obtencion de los RDTSC dividido la cantidad de ticks multiplicado por 5. Esta cuenta nos 
-devuelve la cantidad de instrucciones por segundo. Este valor dividido $1024*1024$ nos da la
-velocidad en MHz de CPU.
-
+simples cuentas que nos devolveran la velocidad del CPU en MHz. Dichas cuentas son 
 
 \section{INT80h}
 Similar a la INT80h de Unix/Linux; la INT80h de Arnix segun el valor en el registro 
