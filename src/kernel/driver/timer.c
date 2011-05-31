@@ -28,7 +28,7 @@ void IRQ0_handler(registers_t regs){
 }
 
 void cpu_speed(registers_t regs){
-	unsigned long k,t;
+	unsigned long k;
 	count_ticks=1;
 	ticks=0;
         int TICK_COUNT = 30;
