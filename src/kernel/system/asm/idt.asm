@@ -1,12 +1,4 @@
-;
-; interrupt.s -- Contains interrupt service routine wrappers.
-;                Based on Bran's kernel development tutorials.
-;                Rewritten for JamesM's kernel development tutorials.
-
-; This macro creates a stub for an ISR which does NOT pass it's own
-; error code (adds a dummy errcode byte).
-
-[GLOBAL idt_flush]    ; Allows the C code to call idt_flush().
+[GLOBAL idt_flush]  ; Allows the C code to call idt_flush().
 
 idt_flush:
     mov eax, [esp+4]  ; Get the pointer to the IDT, passed as a parameter.

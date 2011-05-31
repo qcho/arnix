@@ -44,17 +44,17 @@ _lidt:				; Carga el IDTR
         push    ebp
         mov     ebp, esp
         push    ebx
-        mov     ebx, [ss: ebp + 6] ; ds:bx = puntero a IDTR 
-	rol	ebx,16		    	
+        mov     ebx, [ss: ebp + 6] ; ds:bx = puntero a IDTR
+	rol	ebx,16
 	lidt    [ds: ebx]          ; carga IDTR
         pop     ebx
         pop     ebp
         retn
 
-; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
-;
 
 
+
+; Debug para el BOCHS, detiene la ejecucion para continuar ; colocar en el BOCHSDBG: set $eax=0
 _debug:
         push    bp
         mov     bp, sp
