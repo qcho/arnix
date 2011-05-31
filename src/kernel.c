@@ -10,7 +10,7 @@ IDTR idtr;				/* IDTR */
 
 /**********************************************
 kmain()
-Punto de entrada de cóo C.
+Punto de entrada de codigo C.
 *************************************************/
 
 kmain()
