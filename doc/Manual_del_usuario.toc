@@ -1,0 +1,9 @@
+\select@language {spanish}
+\contentsline {section}{\numberline {1}Manual de uso}{3}
+\contentsline {subsection}{\numberline {1.1}Booteo}{3}
+\contentsline {subsection}{\numberline {1.2}Comandos de shell}{3}
+\contentsline {subsubsection}{\numberline {1.2.1}help}{3}
+\contentsline {subsubsection}{\numberline {1.2.2}getCPUspeed}{3}
+\contentsline {subsubsection}{\numberline {1.2.3}clear}{3}
+\contentsline {subsubsection}{\numberline {1.2.4}echo}{3}
+\contentsline {subsubsection}{\numberline {1.2.5}exit}{3}

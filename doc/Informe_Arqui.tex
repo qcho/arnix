@@ -1,0 +1,126 @@
+\documentclass[a4paper,14.49998pt]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{t1enc}
+\usepackage[pdftex]{graphicx}
+\usepackage[spanish]{babel}
+\usepackage{multicol}
+\usepackage{fancybox}
+\usepackage{fancyhdr}
+\usepackage[pdftex,usenames,dvipsnames]{color}
+\usepackage{listings}
+\usepackage{ucs}
+\usepackage{textcomp}
+\lstset{
+	tabsize=4,
+	rulecolor=,
+	language=matlab,
+        basicstyle=\scriptsize,
+        upquote=true,
+        aboveskip={1.5\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941}
+}
+\pagenumbering{arabic}
+\pagestyle{fancy}
+\fancyhead[L]{Arqui}
+\fancyhead[C]{curso 2011 primer cuatrimestre}
+\fancyhead[R]{TP Especial}
+\title{\Huge{Informe\\\vspace{15mm}Arnix\\\vspace{15mm}Modo protegido con GRUB}}
+\begin{document}
+\maketitle
+\vspace{70mm}
+\large{\underline{Autores:}} 
+\begin{center}
+\begin{tabular}{l r}
+\emph{\author{Axel Wassington}} & Legajo: \emph{50124}\\
+\emph{\author{Horacio Miguel Gomez}} & Legajo: \emph{50825}\\
+\emph{\author{Tomás Mehdi}} & Legajo: \emph{51014}
+\end{tabular}
+\end{center}
+\pagebreak
+\tableofcontents
+\pagebreak
+
+
+\section{Decisiones e implementación del sistema}
+\subsection{Código}
+Se utilizo un mix de assembler con C por decisión de la catedra. Es muy importante aclarar
+este punto, por que varias instrucciones solo pueden hacerse desde assembler y para simplificar
+la codificacion de usa C llamando a assembler o assembler llamando a C.
+\subsection{Compilación, linkedición y ejecución}
+Reemplazamos el compila por un makefile y el arma por un build. El build puede llamarse con el parametro
+clean o no. Si se llama con el parametro se hace un make clean y make. Sino solo se hace el make. Luego
+de estos en los dos casos si el código compila se abre el bochs.
+\subsection{Pantalla}
+\subsection{Tabla global de descriptores}
+\subsection{Interrupciones}
+
+\section{Funcionamiento del comando getCPUspeed}
+Muestra la frecuencia de trabajo del CPU, usando la funcion RDTSC(Read Time-Stamp Counter) de 
+assembler la cual retorna la cantidad de instrucciones realizada hasta el momento desde el
+inicio del procesador y el PIT(Programable Interval Timer). El PIT es un periferico conectado
+a la IRQ0 del master PIC. Utilizando estos elementos podemos obtener una cantidad de
+instrucciones en un intervalo de tiempo. La forma de hacerlo es pidiendo un RDTSC, dejar pasar
+un tiempo fijo y volver a pedir un RDTSC. El tiempo fijo lo generamos con una cantidad coherente
+de timer ticks, para ello no debe ser muy pequeña. Ya teniendo estos datos solo falta hacer 
+simples cuentas que nos devolveran la velocidad del CPU en MHz.
+
+\section{INT80h}
+Similar a la INT80h de Unix/Linux; la INT80h de Arnix segun el valor en el registro 
+EAX elige una instruccion.Las instrucciones que puede realizar son las siguientes:
+\begin{enumerate}
+\item Con el valor 3 en EAX hace un read usando los valores de EBX, ECX y EDX. En estos regristros debe
+estar el tamaño de lo que se va a leer, el source buffer y un file descriptor(de donde leer) respectivamente.
+
+\item Con el valor 4 en EAX hace un write usando los valores de EBX, ECX y EDX. En estos regristros debe
+estar el tamaño de lo que se va a escribir, el source buffer y un file descriptor(donde esribir) 
+respectivamente.
+
+\item Con el valor 5 en EAX hace un rdtsc guardando el valor en el registro EBX.
+\end{enumerate}
+\pagebreak
+
+\section{Referencias}
+Esta sección detalla las distintas fuentes de información utilizadas para
+el desarrollo del TP Especial. Es importante destacar que son las mismas fuentes
+enviadas en un mail previo a la entrega.
+\subsection{Interrupciones}
+El manejo de interrupciones es similar al usado en el siguiente tutorial:
+\begin{center}
+http://www.jamesmolloy.co.uk/tutorial\_html/4.-The\%20GDT\%20and\%20IDT.html\\
+\end{center}
+Nos pareció interesante la opción de crear un wrapper para las idt y luego desde
+C simplemente asignar handlers a las convenientes, un wrapper se encarga de que a 
+C le lleguen los parametros.También creimos importante tener las entrys para las 
+primeras 31 exceptions del procesador, para evitar resets si por ejemplo dividimos por cero.
+
+\subsection{Pantalla}
+Nos basamos en la implementación de Linux, la pantalla puede recibir scape chars para 
+limpiar la pantalla, o imprimir en colores. Esto era conveniente debido a que al 
+utilizar la int80, no necesitamos parametros extra, para estas funcionalidades extra.
+
+\subsection{Reboot}
+Luego de probar soluciones sucias, como hacer que el procesador triple-faultee y 
+se reinicie la pc. Encontrámos la solucion de enviar la señal de reset desde el 
+controlador de teclado en:
+\begin{center}
+http://wiki.osdev.org/Reboot
+\end{center}
+\subsection{Paginas web utilizadas}
+En general leimos mucho de:
+\begin{center}http://wiki.osdev.org/Main\_Page ( y sus foros )\\
+http://www.jamesmolloy.co.uk/tutorial\_html/index.html\\
+http://www.osdever.net/tutorials/view/brans-kernel-development-tutorial\\
+\end{center}
+\end{document}
