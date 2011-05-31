@@ -7,11 +7,12 @@ typedef int (*main)(int argc,char * argv[]);
 struct command_struct {
     char * name;
     main start;
+    char * help;
 };
 
 typedef struct command_struct command_t;
 
-void add_command(char * name,main function);
+void add_command(char * name,main function, char* help);
 main get_command(char * name);
 
 char * autocomplete(char * name);

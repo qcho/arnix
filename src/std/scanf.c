@@ -1,8 +1,7 @@
-#include "../../include/varargs.h"
-#include "../../include/stdarg.h"
-#include "string.h"
+#include "../../src/std/string.h"
+#include "stdio.h"
 
-int( readFromStr)(char *formatString, char *format, ...) {
+int sscanf(char *formatString, char *format, ...) {
 	va_list ap;
 	va_start ( ap, format );
 	float *f;

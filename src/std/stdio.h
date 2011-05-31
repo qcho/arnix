@@ -7,5 +7,6 @@
 char getchar();
 void putchar(char c);
 void printf( char * formatString, ...);
+int sscanf(char *formatString, char *format, ...);
 
 #endif //STDIO_H

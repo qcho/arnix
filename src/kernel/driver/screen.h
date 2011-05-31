@@ -8,10 +8,10 @@
 /**
  * Escribe un caracter en pantalla.
  * @param char c: el caracter a escribir.
- *  Scape Characters implementados:         
- *     Esc[2J                   Erase Display: Clears the screen and moves the cursor to the home position (line 0, column 0). 
- *   
- *     Esc[#;#;...m 	Set Graphics Mode: Calls the graphics functions specified by the following values. These specified functions remain active until the next occurrence of this escape sequence. Graphics mode changes the colors and attributes of text (such as bold and underline) displayed on the screen.
+ *  Los siguientes ANSI scape Characters fueron implementados:   
+ *       
+ *     Esc[2J           Borra la pantalla y mueve el cursor a (line 0, column 0). 
+ *     Esc[#;#;...m 	Cambia el modo de graficos segun los siguientes atributos:
  * 
  * Text attributes
  * 0	All attributes off
