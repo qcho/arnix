@@ -4,8 +4,7 @@
 typedef int (*main)(int argc,char * argv[]);
 
 
-struct command_struct
-{
+struct command_struct {
     char * name;
     main start;
 };

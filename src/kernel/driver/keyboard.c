@@ -1,7 +1,6 @@
 #include "../system/isr.h"
 #include "../system/in_out.h"
 #include "../system/keyboardlisteners.h"
-#include "../../std/printf.c"
 
 #define KEYBOARD 0x60
 #define BUFFER_SIZE 100
@@ -72,19 +71,17 @@ void IRQ1_handler(registers_t reg){
 			}
 			stdin.array[stdin.end]=c;
 			stdin.end=tmp;	
-		}else
-		{
-			//printf("buffer lleno");//TODO cambiar por bip
+		} else {
+                    //TODO: beep
 		}
 	}
-	//printf("%d-",i);
 }
 
-PRIVATE void reset(){
+static void reset(){
 	outb(0x64,0xFE);
 }
 
-PRIVATE int cnrl_alt_supr_manager(){
+static int cnrl_alt_supr_manager(){
 	reset();
 	return 0;
 }

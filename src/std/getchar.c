@@ -1,5 +1,4 @@
 #include "stdio.h"
-#include "printf.c"
 
 #define STREAM_SIZE 500
 
@@ -10,13 +9,12 @@ char * streamout=stream;
 
 
 int intro_flush(char * streampointer){
-	if(*streampointer=='\n' || *streampointer=='\t' || 1>=STREAM_SIZE-(streampointer-stream)-1){
+	if(*streampointer=='\n' || 1>=STREAM_SIZE-(streampointer-stream)-1){
 		return 1;
 	}
 	
 	return 0;
 }
-
 
 char getchar(){
 	char c=*streamout;
@@ -41,7 +39,9 @@ char getchar(){
 					streamin--;
 				}
 				*streamin='\0';
-			}
+                        } else if(*streamin=='\t'){
+                            *streamin='\0';
+                        }
 		}
 		c=*streamout;
 	}

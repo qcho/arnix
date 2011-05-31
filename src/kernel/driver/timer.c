@@ -28,7 +28,7 @@ void IRQ0_handler(registers_t regs){
 }
 
 void cpu_speed(registers_t regs){
-	int k,t;
+	unsigned long k,t;
 	count_ticks=1;
 	ticks=0;
 	_Sti();
@@ -37,7 +37,7 @@ void cpu_speed(registers_t regs){
 	k=getRDTSC()-k;
 	_Cli();
 	count_ticks=0;
-	*((int*)regs.ebx)=(k/ticks)*18+k/(ticks*5);
+	*((unsigned long*)regs.ebx)=(k/ticks)*18+k/(ticks*5);
 }
 
 void init_timer_tick(){

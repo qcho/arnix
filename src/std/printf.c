@@ -1,28 +1,14 @@
-
-#ifndef PRINTF_C
-#define PRINTF_C
-//para printf
-
-#ifndef PUTCHAR_C
-#define PUTCHAR_C
-
-#include "putchar.c"
-
-#endif //PUTCHAR_C
-
-#include "../../include/varargs.h"
-#include "../../include/stdarg.h"
-
+#include "stdio.h"
 
 static void prints(char * string);
 
 static char * numberBaseNtoString(unsigned int number, int base, char * out);
-//para printf
 
+void putchar(char c){
+	__write(1,&c,1);
+}
 
-//myprintfcode
-
-static void printf( char * formatString, ...) {
+void printf( char * formatString, ...) {
 	int integer;
 	unsigned int unsigenedInteger;
 	char * string;
@@ -87,7 +73,7 @@ static void prints(char * string){
 }
 
 
-char * numberBaseNtoString(unsigned int number, int base, char * out){
+static char * numberBaseNtoString(unsigned int number, int base, char * out){
 
 	int digits[40];
 	int position = 0;
@@ -117,7 +103,3 @@ char * numberBaseNtoString(unsigned int number, int base, char * out){
 
 	return out;
 }
-
-
-//end myprintfcode
-#endif //PRINTF_C

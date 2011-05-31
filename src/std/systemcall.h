@@ -1,23 +1,9 @@
-/* 
- * File:   systemcall.h
- * Author: qcho
- *
- * Created on May 15, 2011, 11:07 AM
- */
-
 #ifndef SYSTEMCALL_H
 #define	SYSTEMCALL_H
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
-
-
-
-#ifdef	__cplusplus
-}
-#endif
+void __read(int fd, void* buffer, int count);
+void __write(int fd, const void* buffer, int count);
+void __cpuspeed(void * ips);
 
 #endif	/* SYSTEMCALL_H */
 

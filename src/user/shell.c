@@ -1,14 +1,17 @@
 #include "shell.h"
 
 #include "../std/stdio.h"
-#include "../std/printf.c"
-#include "../std/stdlib.h"
+#include "../std/string.h"
 
 #include "commands.h"
 
 #define NULL 0
 #define COMAND_LINE_MAX 1000
 
+#define HISTORY_MAX 20
+char* history[HISTORY_MAX][COMAND_LINE_MAX];
+int history_current = 0;
+int history_count = 0;
 
 char * name="user";
 char * pcname="thispc";
@@ -61,10 +64,6 @@ int parseline(){
 	int i=0;
 	char comand_line[COMAND_LINE_MAX];
 	while((c=getchar())!='\n' && i<COMAND_LINE_MAX-3){
-		if(c=='\t'){
-			strcpy(comand_line[strlen(comand_line)],autocomplete(comand_line));
-			__write(0,comand_line,strlen(comand_line));
-		}
 		comand_line[i]=c;
 		i++;
 	}
@@ -102,9 +101,9 @@ int echo_shell(int argc,char* argv[]){
 }
 
 int getCPUspeed_shell(){
-	int ips;
+	unsigned long ips;
 	__cpuspeed(&ips);
-	printf("Su procesador esta ejecutando %d instrucciones por segudo.\n",ips);
+	//printf("Su procesador esta ejecutando %d instrucciones por segudo.\n",ips);
 	printf("La velocidad en MHz es:%d.%d MHz\n",(ips)/(1024*1024),((10*ips)/(1024*1024))%10);
 	return 0;
 }
@@ -114,12 +113,23 @@ int clear_shell(){
 	return 0;
 }
 
+int help_shell(){
+    printf("These are the commands available: \n");
+    char** commands = get_command_list();
+    int i = 0;
+    while(commands[i]) {
+        printf("\x1B[4m%s\x1B[0m\t\n", commands[i++]);
+    }
+    return 0;
+}
+
 void shell_start(){
 	int exit=0;
-	add_command("echo",echo_shell);	
-	add_command("exit",exit_shell);	
-	add_command("getCPUspeed",getCPUspeed_shell);
-	add_command("clear",clear_shell);
+	add_command("echo", echo_shell);	
+	add_command("exit", exit_shell);	
+	add_command("getCPUspeed", getCPUspeed_shell);
+	add_command("clear", clear_shell);
+        add_command("help", help_shell);
 	while(!exit)
 	{
 		printuser();

@@ -5,12 +5,8 @@
 #include "kernel/driver/keyboard.h"
 #include "kernel/system/keyboardlisteners.h"
 
-//#include "std/printf.c"
-
 DESCR_INT idt[0x80];			/* IDT de 80 entradas*/
 IDTR idtr;				/* IDTR */
-
-int tickpos=0;
 
 /**********************************************
 kmain()
