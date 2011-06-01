@@ -6,7 +6,6 @@
 // The VGA framebuffer starts at 0xB8000.
 int16_t *video_memory = (int16_t *)0xB8000;
 // Stores the cursor position.
-
 #define BUFFER_SIZE 1000
 
 char array_out[BUFFER_SIZE];
@@ -68,7 +67,7 @@ static void scroll() {
 static void print(char c) {
     int16_t *location;
     location = video_memory + (screen_cursor_y*SCREEN_SIZE_X + screen_cursor_x);
-    
+
     if (c != '\b') {
         *location = (c | (screen_settings << 8));
         if (++screen_cursor_x >= SCREEN_SIZE_X) {
@@ -131,7 +130,7 @@ static void do_scape_J() {
 
 /* Map from ANSI colors to the attributes used by the PC */
 static uint8_t ansi_colors[8] = {0, 4, 2, 6, 1, 5, 3, 7};
-    
+
 static void do_scape_m() {
     int i;
     for (i=0;i<screen_param_count;i++){
@@ -189,7 +188,7 @@ static void do_scape(char c) {
                         break;
                 }
                 screen_state = 0;
-            }  
+            }
             break;
     }
 }
@@ -252,5 +251,4 @@ void init_screen(){
 	stdout.size=BUFFER_SIZE;
 	add_in_out(1,&stdout);
         screen_write("\x1B[2J");
-        //screen_write("\x1B[34;47m");
 }

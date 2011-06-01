@@ -96,7 +96,7 @@ IRQ  15,    47
 ; In isr.c
 extern isr_handler
 
-; This is our common ISR stub. It saves the processor state, sets
+; ISR stub. It saves the processor state, sets
 ; up for kernel mode segments, calls the C-level fault handler,
 ; and finally restores the stack frame.
 isr_common_stub:
@@ -119,7 +119,7 @@ isr_common_stub:
     mov fs, bx
     mov gs, bx
 
-    popa                     ; Pops edi,esi,ebp...
+    popa                     ; Pops edi,esi,ebp,...
     add esp, 8     ; Cleans up the pushed error code and pushed ISR number
     sti
     iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
@@ -127,7 +127,7 @@ isr_common_stub:
 ; In isr.c
 extern irq_handler
 
-; This is our common IRQ stub. It saves the processor state, sets
+; IRQ stub. It saves the processor state, sets
 ; up for kernel mode segments, calls the C-level fault handler,
 ; and finally restores the stack frame.
 irq_common_stub:

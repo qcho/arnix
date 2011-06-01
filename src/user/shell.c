@@ -11,12 +11,6 @@
 
 #define HISTORY_MAX 20
 
-/*
-char* history[HISTORY_MAX][COMAND_LINE_MAX];
-int history_current = 0;
-int history_count = 0;
-*/
-
 #define NAME_MAX_LENGTH 50
 char name[NAME_MAX_LENGTH]="unknown";
 char * pcname="itba";
@@ -49,7 +43,7 @@ char * strnormalise(char * str){
 }
 
 void printuser(){
-	printf("\x1B[36;1m%s@%s:~$ \x1B[0m",name,pcname); 
+	printf("\x1B[36;1m%s@%s:~$ \x1B[0m",name,pcname);
 }
 
 int execute(char* comand,int argcant,char * argvec[]){
@@ -125,7 +119,7 @@ int isodd_shell(int argc,char* argv[]) {
         return -1;
     }
     printf("Number %s", argv[0]);
-    
+
     int number;
     sscanf("%d", argv[0], &number);
     printf("int %d", number);
@@ -164,7 +158,7 @@ int rename_shell(int argc,char* argv[]){
 void shell_start(){
     int exit=0;
     add_command("rename", rename_shell, "changes the name of the user of this pc");
-    add_command("echo", echo_shell, "echoes some text, don't forget the quotes (\") if you use spaces");	    
+    add_command("echo", echo_shell, "echoes some text, don't forget the quotes (\") if you use spaces");
     add_command("clear", clear_shell, "clears the screen");
     add_command("help", help_shell, "shows help");
     add_command("isodd", isodd_shell, "tells if the number is odd or not");
