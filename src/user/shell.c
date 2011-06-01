@@ -137,7 +137,7 @@ int isodd_shell(int argc, char* argv[]) {
 
 int help_shell(int argc, char* argv[]) {
     printf("\x1B[33mThese are the commands available: \x1B[0m\n\n");
-    command_t *commands = get_command_list();
+    command_t *commands = (command_t *)get_command_list();
     int i = 0;
     while (i < get_commands_added()) {
         printf("\x1B[4m%s\x1B[0m\t\t%s\n", commands[i].name, commands[i].help);
