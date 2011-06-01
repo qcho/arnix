@@ -109,16 +109,13 @@ que remapeamos todas las interrupciones para que no se pisen con las exepciones(
 de la idt) lo que nos facilito mucho la programacion.
 
 \subsection{Shell}
-El maximo tamaño de un comando son 1000 caracteres.
-si te pasas ignora los las siguitenes entradas.
-al inicial se agregan todas los comandos, esto se hace utilizando una estructura 
-que tiene un puntero a función y el nombre del comando.
-Cada 500 caracteres se hace un flush del stream y no te permite borrar los 500 caracteres
-anteriores. Elimina los espacios del principio y del final y los espacios multiples 
-entre medio de distintos argumentos. Se puede ingresar un argumento entre comillas para 
-que no lo divida por espacios demas. A diferencia de las shells que normalmente 
-utilizamos (Unix/Linux) elimina los espacios repetidos y no permite poner enters 
-en medio de un argumento.
+Al iniciar la shell se agregan todas los comandos, esto se hace utilizando una estructura 
+que tiene un puntero a función y el nombre del comando. El maximo tamaño de un comando son 
+1000 caracteres, si te pasas ignora los las siguitenes entradas. Cada 500 caracteres se 
+hace un flush del stream y no te permite borrar los 500 caracteres anteriores. Se puede 
+ingresar un argumento entre comillas para que lo considere como un solo argumento. A diferencia 
+de las shells que normalmente utilizamos (Unix/Linux), nuestro shell ignora los espacios 
+del principio y del final y los espacios multiples entre medio de distintos argumentos. 
 
 
 \subsection{Division del Kernel y user space}
@@ -165,9 +162,17 @@ utilizadas; imprimir un $int, string, decimal a octal, decimal a hexa, un caract
 unsigned int$. El printf utiliza putchar.c la cual utiliza la funcion \_\_write.
 
 \subsection{Teclado}
+Se crearon dos mapeos de teclado, uno es para cuando el shift esta apretado y el otro cuando no.
+Hay cuatro vectores de listeners que se utilizan para los distintos estados del teclado
+según el keypress de las teclas $CTRL$ y $ALT$. Cuando se aprieta el $BLOCK MAYUS$ se activa una
+variable, mediante la cual el teclado actua simplemente sumando un ascii para que los valores
+cambien de lowerCase a upperCase o de upperCase a lowerCase. Al apretar a la vez $CTRL+ALT+DEL$
+el sistema se reinicia, mandando un valor determinado a cierta dirección del teclado.
 
-
-
+\subsection{IN-OUT}
+Tenemos un vector de diez lugares en los cuales estan los distintos tipos de $in-out$. En la
+primera posición del vector ($index = 0$) esta el standard $in$ y en la segunda posicióm el standard
+$out$
 
 \section{Referencias}
 Esta sección detalla las distintas fuentes de información utilizadas para

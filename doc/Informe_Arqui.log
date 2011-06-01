@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2009.9.30)  31 MAY 2011 20:37
+This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2009.9.30)  31 MAY 2011 21:02
 entering extended mode
  %&-line parsing enabled.
 **Informe_Arqui.tex
@@ -332,7 +332,7 @@ LaTeX Warning: No \author given.
 \openout4 = `Informe_Arqui.toc'.
 
  [2] [3] [4] [5] [6]
-Overfull \hbox (9.67622pt too wide) in paragraph at lines 162--166
+Overfull \hbox (9.67622pt too wide) in paragraph at lines 159--163
 \OML/cmm/m/it/12 int; string; decimalaoctal; decimalahexa; uncaracter; unsigned
 int$\T1/cmr/m/n/12 . El
  []
@@ -355,7 +355,7 @@ x1440.pfb></opt/texlive/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></o
 pt/texlive/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></opt/texlive/te
 xmf-dist/fonts/type1/public/cm-super/sfrm2488.pfb></opt/texlive/texmf-dist/font
 s/type1/public/cm-super/sfti1200.pfb>
-Output written on Informe_Arqui.pdf (8 pages, 150414 bytes).
+Output written on Informe_Arqui.pdf (8 pages, 155326 bytes).
 PDF statistics:
  66 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
