@@ -31,7 +31,7 @@ void init_descriptor_tables()
     _mascaraPIC1(0xFE);
     _mascaraPIC2(0xFF);
     _Sti();
-    
+
     // Initialise the interrupt descriptor table.
     init_idt();
 }

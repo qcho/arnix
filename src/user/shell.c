@@ -86,6 +86,10 @@ int parseline() {
             argvec[argcant] = &command[i + 1];
             argcant++;
         } else if (command[i] == '"') {
+            if(!in_quotes) {
+                argvec[argcant-1] = &command[i + 1];
+            }
+            command[i] = '\0';
             in_quotes = !in_quotes;
         }
     }

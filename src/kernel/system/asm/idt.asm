@@ -89,7 +89,7 @@ IRQ  15,    47
   isr80h:
     cli                         ; Disable interrupts firstly.
     push byte 0                 ; Push a dummy error code.
-    push byte 128               ; Push the interrupt number.
+    push byte 80h               ; Push the interrupt number.
     jmp isr_common_stub         ; Go to our common handler code.
 
 

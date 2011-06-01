@@ -1,12 +1,8 @@
 #include "../include/kasm.h"
-#include "../include/defs.h"
 #include "kernel/driver/screen.h"
 #include "kernel/system/idt.h"
 #include "kernel/driver/keyboard.h"
 #include "kernel/system/keyboardlisteners.h"
-
-DESCR_INT idt[0x80];			/* IDT de 80 entradas*/
-IDTR idtr;				/* IDTR */
 
 /**********************************************
 kmain()
