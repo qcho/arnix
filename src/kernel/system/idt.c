@@ -1,10 +1,3 @@
-//
-// descriptor_tables.c - Initialises the GDT and IDT, and defines the
-//                       default ISR and IRQ handler.
-//                       Based on code from Bran's kernel development tutorials.
-//                       Rewritten for JamesM's kernel development tutorials.
-//
-
 #include "common.h"
 #include "idt.h"
 #include "isr.h"
@@ -103,10 +96,10 @@ static void init_idt()
     idt_set_gate(45, (uint32_t)irq13, 0x08, 0x8E);
     idt_set_gate(46, (uint32_t)irq14, 0x08, 0x8E);
     idt_set_gate(47, (uint32_t)irq15, 0x08, 0x8E);
-    
-    
+
+
     idt_set_gate(0X80, (uint32_t)isr80h, 0x08, 0x8E);
-    
+
 
     idt_flush((uint32_t)&idt_ptr);
 }
@@ -118,7 +111,6 @@ static void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags
 
     idt_entries[num].sel     = sel;
     idt_entries[num].always0 = 0;
-    // We must uncomment the OR below when we get to using user-mode.
-    // It sets the interrupt gate's privilege level to 3.
-    idt_entries[num].flags   = flags /* | 0x60 */;
+
+    idt_entries[num].flags   = flags;
 }

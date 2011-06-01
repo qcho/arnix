@@ -1,5 +1,5 @@
 #include "shell.h"
-
+#include "../std/systemcall.h"
 #include "../std/stdio.h"
 #include "../std/string.h"
 
@@ -10,12 +10,6 @@
 #define EXIT_SYSTEM -15
 
 #define HISTORY_MAX 20
-
-/*
-char* history[HISTORY_MAX][COMAND_LINE_MAX];
-int history_current = 0;
-int history_count = 0;
- */
 
 #define NAME_MAX_LENGTH 50
 char name[NAME_MAX_LENGTH] = "unknown";
@@ -97,6 +91,7 @@ int parseline() {
 }
 
 int exit_shell(int argc, char* argv[]) {
+    clear_shell();
     return EXIT_SYSTEM;
 }
 
@@ -130,10 +125,10 @@ int isodd_shell(int argc, char* argv[]) {
     int number;
     sscanf(argv[0], "%d", &number);
 
-    if (number % 2 == 1) {
-        printf("The number %d is ODD", number);
-    } else {
+    if (number % 2 == 0) {
         printf("The number %d is NOT ODD, its EVEN.", number);
+    } else {
+        printf("The number %d is ODD", number);
     }
     printf("\n");
     return 0;
@@ -147,7 +142,7 @@ int help_shell(int argc, char* argv[]) {
         printf("\x1B[4m%s\x1B[0m\t\t%s\n", commands[i].name, commands[i].help);
         i++;
     }
-    printf("\n");
+    printf("\nPress CTRL+ALT+SUPR to reboot the system\n");
     return 0;
 }
 

@@ -12,4 +12,4 @@ struct buffer_struct
 
 typedef struct buffer_struct buffer_t;
 
-#endif // IN_H
+#endif // IN_OUT_H
