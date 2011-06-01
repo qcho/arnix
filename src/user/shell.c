@@ -156,7 +156,7 @@ int rename_shell(int argc, char* argv[]) {
 
 static void test_shell_print_usage(){
     printf("Usage: rename <testcase>.\n");
-    printf("\tprintf\n\tscanf\n");
+    printf("testcases:\n\tprintf\n\tscanf\n");
 }
 
 int test_shell(int argc, char* argv[]) {

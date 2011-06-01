@@ -1,43 +1,39 @@
 #include "common.h"
 
-// Initialisation function is publicly accessible.
 void init_descriptor_tables();
 
-// A struct describing an interrupt gate.
-struct idt_entry_struct
-{
-    uint16_t base_lo;             // The lower 16 bits of the address to jump to when this interrupt fires.
-    uint16_t sel;                 // Kernel segment selector.
-    uint8_t  always0;             // This must always be zero.
-    uint8_t  flags;               // More flags. See documentation.
-    uint16_t base_hi;             // The upper 16 bits of the address to jump to.
+// interrupt gate descriptor
+struct idt_entry_struct {
+    uint16_t base_lo;
+    uint16_t sel;
+    uint8_t always0;
+    uint8_t flags;
+    uint16_t base_hi;
 } __attribute__((packed));
 
 typedef struct idt_entry_struct idt_entry_t;
 
-// A struct describing a pointer to an array of interrupt handlers.
-// This is in a format suitable for giving to 'lidt'.
-struct idt_ptr_struct
-{
+// array of interrupt handlers descriptor (for lidt).
+struct idt_ptr_struct {
     uint16_t limit;
-    uint32_t base;                // The address of the first element in our idt_entry_t array.
+    uint32_t base;
 } __attribute__((packed));
 
 typedef struct idt_ptr_struct idt_ptr_t;
 
 #define IDT_SIZE 256
 
-// These extern directives let us access the addresses of our ASM ISR handlers.
-extern void isr0 ();
-extern void isr1 ();
-extern void isr2 ();
-extern void isr3 ();
-extern void isr4 ();
-extern void isr5 ();
-extern void isr6 ();
-extern void isr7 ();
-extern void isr8 ();
-extern void isr9 ();
+// interrupciones default del procesador.
+extern void isr0();
+extern void isr1();
+extern void isr2();
+extern void isr3();
+extern void isr4();
+extern void isr5();
+extern void isr6();
+extern void isr7();
+extern void isr8();
+extern void isr9();
 extern void isr10();
 extern void isr11();
 extern void isr12();
@@ -60,16 +56,16 @@ extern void isr28();
 extern void isr29();
 extern void isr30();
 extern void isr31();
-extern void irq0 ();
-extern void irq1 ();
-extern void irq2 ();
-extern void irq3 ();
-extern void irq4 ();
-extern void irq5 ();
-extern void irq6 ();
-extern void irq7 ();
-extern void irq8 ();
-extern void irq9 ();
+extern void irq0();
+extern void irq1();
+extern void irq2();
+extern void irq3();
+extern void irq4();
+extern void irq5();
+extern void irq6();
+extern void irq7();
+extern void irq8();
+extern void irq9();
 extern void irq10();
 extern void irq11();
 extern void irq12();

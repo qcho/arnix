@@ -2,10 +2,6 @@
 #include "idt.h"
 #include "isr.h"
 
-// Lets us access our ASM functions from our C code.
-extern void idt_flush(uint32_t);
-
-// Internal function prototypes.
 static void init_idt();
 static void idt_set_gate(uint8_t, uint32_t, uint16_t, uint8_t);
 
@@ -14,9 +10,8 @@ idt_ptr_t   idt_ptr;
 
 // Extern the ISR handler array so we can nullify them on startup.
 extern isr_t interrupt_handlers[];
+extern void idt_flush(uint32_t);
 
-// Initialisation routine - zeroes all the interrupt service routines,
-// initialises the GDT and IDT.
 void init_descriptor_tables()
 {
     /* Habilito interrupcion de timer tick*/
@@ -24,8 +19,7 @@ void init_descriptor_tables()
     _mascaraPIC1(0xFE);
     _mascaraPIC2(0xFF);
     _Sti();
-
-    // Initialise the interrupt descriptor table.
+    
     init_idt();
 }
 
