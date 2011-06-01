@@ -155,7 +155,7 @@ int rename_shell(int argc, char* argv[]) {
 }
 
 static void test_shell_print_usage(){
-    printf("Usage: rename <testcase>.\n");
+    printf("Usage: test <testcase>.\n");
     printf("testcases:\n\tprintf\n\tscanf\n");
 }
 
@@ -168,8 +168,6 @@ int test_shell(int argc, char* argv[]) {
     unsigned int uinteger;
     char* string;
     char chr;
-    
-    
     
     if (!strcmp(argv[0], "printf")) {
         printf("\x1B[32mPlease verify the OKval is the same as RETval\n\x1B[1mNOTATION: case[OKval]: RETval\x1B[0m");
