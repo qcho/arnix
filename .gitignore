@@ -7,3 +7,6 @@ compila
 img/
 *~
 Debug/
+*.toc
+*.log
+*.aux
